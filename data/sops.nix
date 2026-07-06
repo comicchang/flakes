@@ -30,10 +30,6 @@ in
 rec {
 
   secrets = {
-    "secrets/clash" = [
-      "desktop"
-      "xiaoxin"
-    ];
     "secrets/passwd.yaml" = builtins.attrNames machines;
     "secrets/shadowsocks.yaml" = [ "rpi3" ];
     "secrets/ssh-keys.yaml" = [

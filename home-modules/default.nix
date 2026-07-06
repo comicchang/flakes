@@ -9,7 +9,6 @@
     ./fzf
     ./git.nix
     ./helix.nix
-    ./hyprland
     ./neovim
     ./nix-gc.nix
     ./python.nix
