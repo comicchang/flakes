@@ -101,7 +101,7 @@ with lib;
     };
   };
 
-  time.timeZone = "Asia/Hong_Kong";
+  time.timeZone = "Asia/Taipei";
 
   i18n.defaultLocale = "C.UTF-8";
 
