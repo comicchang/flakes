@@ -35,11 +35,13 @@ in
       passwordFile = config.sops.secrets."restic/password".path;
       paths = [ "/persist" ];
       exclude = [
+        # keep-sorted start
+        "/persist/home/*/.cache"
         "/persist/var/cache"
         "/persist/var/lib/postgresql"
         "/persist/var/log"
         "/persist/var/tmp"
-        "/persist/home/*/.cache"
+        # keep-sorted end
       ]
       ++ cfg.exclude;
       repository = "s3:s3.us-west-004.backblazeb2.com/restic-rvfg";

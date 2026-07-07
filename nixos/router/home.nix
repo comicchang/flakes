@@ -5,6 +5,7 @@
   ];
 
   home.packages = with pkgs; [
+    # keep-sorted start
     ethtool
     iperf
     lm_sensors
@@ -12,6 +13,7 @@
     powertop
     usbutils
     wol
+    # keep-sorted end
   ];
 
   presets.git.enable = true;

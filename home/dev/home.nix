@@ -45,6 +45,7 @@
   home.homeDirectory = "/home/ruifeng.ma";
 
   home.packages = with pkgs; [
+    # keep-sorted start
     abi-compliance-checker
     abi-dumper
     checksec
@@ -65,6 +66,7 @@
     strace
     unar
     util-linux
+    # keep-sorted end
   ];
 
   programs.fish.interactiveShellInit = lib.mkOrder 10 ''

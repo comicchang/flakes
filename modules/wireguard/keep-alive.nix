@@ -89,10 +89,12 @@ in
             AmbientCapabilities = [ "CAP_NET_ADMIN" ];
             CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
             RestrictAddressFamilies = [
-              "AF_UNIX"
+              # keep-sorted start
               "AF_INET"
               "AF_INET6"
               "AF_NETLINK"
+              "AF_UNIX"
+              # keep-sorted end
             ];
             PrivateNetwork = false;
             PrivateUsers = false;

@@ -41,12 +41,14 @@ with lib;
   };
 
   environment.systemPackages = with pkgs; [
+    # keep-sorted start
     bandwhich
     compsize
     conntrack-tools
     dig
     lsof
     tcpdump
+    # keep-sorted end
   ];
 
   boot = {

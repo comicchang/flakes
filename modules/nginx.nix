@@ -30,11 +30,15 @@ in
   config = lib.mkIf cfg.enable {
     networking.firewall = {
       allowedTCPPorts = [
+        # keep-sorted start numeric=yes
         80
         443
+        # keep-sorted end
       ];
       allowedUDPPorts = [
+        # keep-sorted start numeric=yes
         443
+        # keep-sorted end
       ];
     };
 

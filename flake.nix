@@ -142,11 +142,13 @@
 
           devShells.default = pkgs.mkShell {
             packages = [
-              deploy-script
-              deploy-lan-script
-              update-script
+              # keep-sorted start
               build-script
+              deploy-lan-script
+              deploy-script
               sops
+              update-script
+              # keep-sorted end
             ];
           };
 
@@ -155,10 +157,12 @@
             program =
               let
                 hosts = [
-                  "sg"
+                  # keep-sorted start
                   "nl"
                   "or1"
                   "or2"
+                  "sg"
+                  # keep-sorted end
                 ];
                 known_hosts = pkgs.writeText "ssh_known_hosts" (
                   builtins.concatStringsSep "" (map (host: "${host}.rvf6.com ${data.sshPub.${host}}\n") hosts)

@@ -139,6 +139,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      # keep-sorted start
       android-tools
       dmidecode
       e2fsprogs
@@ -149,6 +150,7 @@ in
       sbsigntool
       smartmontools
       strongswan
+      # keep-sorted end
     ];
 
     preservation.preserveAt."/persist".users.rvfg = {
@@ -212,13 +214,15 @@ in
           nerd-fonts.symbols-only
           (noto-fonts.override {
             variants = [
+              # keep-sorted start
               "Noto Music"
-              "Noto Sans Symbols"
-              "Noto Sans Symbols 2"
-              "Noto Sans Math"
-              "Noto Sans Thai"
-              "Noto Sans Oriya"
               "Noto Sans Bamum"
+              "Noto Sans Math"
+              "Noto Sans Oriya"
+              "Noto Sans Symbols 2"
+              "Noto Sans Symbols"
+              "Noto Sans Thai"
+              # keep-sorted end
             ];
           })
         ];
@@ -290,9 +294,11 @@ in
     services.usbmuxd.enable = true;
 
     users.users.rvfg.extraGroups = [
+      # keep-sorted start
       "adbusers"
       "wireshark"
       "wpa_supplicant"
+      # keep-sorted end
     ];
 
     nixpkgs.config.allowUnfreePredicate =

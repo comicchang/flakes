@@ -8,15 +8,19 @@
   presets.workstation.enable = true;
 
   home.packages = with pkgs; [
+    # keep-sorted start
     acpi
     brightnessctl
+    # keep-sorted end
   ];
 
   services.fusuma = {
     enable = true;
     extraPackages = with pkgs; [
+      # keep-sorted start
       coreutils
       gnugrep
+      # keep-sorted end
     ];
     settings = {
       interval.swipe = 0.8;

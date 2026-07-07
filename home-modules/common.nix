@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    # keep-sorted start
     binutils
     duf
     file
@@ -10,6 +11,7 @@
     ncdu
     nix-output-monitor
     ripgrep
+    # keep-sorted end
   ];
 
   presets.btop.enable = true;

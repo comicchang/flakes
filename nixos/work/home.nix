@@ -48,12 +48,14 @@
   presets.helix.enable = true;
 
   home.packages = with pkgs; [
+    # keep-sorted start
     checksec
     gcc
     gdb
     kubectl
     kubevirt
     unar
+    # keep-sorted end
   ];
 
   programs.gpg.enable = true;

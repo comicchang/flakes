@@ -231,17 +231,21 @@ in
       serviceConfig = self.data.systemdHarden // {
         Type = "oneshot";
         RestrictAddressFamilies = [
-          "AF_UNIX"
+          # keep-sorted start
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+          "AF_UNIX"
+          # keep-sorted end
         ];
         PrivateNetwork = false;
         PrivateUsers = false;
         DynamicUser = false;
         ReadWritePaths = [
+          # keep-sorted start
           "/run"
           "/var/run"
+          # keep-sorted end
         ];
         StateDirectory = "%N";
       };

@@ -21,10 +21,12 @@ let
   apiPort = 9090;
 
   servicePorts = [
-    tproxyPort
-    httpPort
-    httpCNPort
+    # keep-sorted start
     apiPort
+    httpCNPort
+    httpPort
+    tproxyPort
+    # keep-sorted end
   ];
 
   downloadDomains = [

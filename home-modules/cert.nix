@@ -84,10 +84,12 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = [
+      # keep-sorted start
       openssl-p11
       sign-client
       sign-client-p12
       sign-server
+      # keep-sorted end
     ];
   };
 }

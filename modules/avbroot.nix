@@ -57,15 +57,19 @@ in
           };
         })
         [
+          # keep-sorted start
           "avbroot/avb_key"
-          "avbroot/ota_key"
           "avbroot/ota_crt"
+          "avbroot/ota_key"
+          # keep-sorted end
         ]
     );
 
     environment.systemPackages = with pkgs; [
+      # keep-sorted start
       avbroot
       avbroot-patch
+      # keep-sorted end
     ];
 
   };

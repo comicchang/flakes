@@ -59,9 +59,11 @@ let
                 scopes = mkOption {
                   type = types.listOf types.str;
                   default = [
-                    "openid"
+                    # keep-sorted start
                     "email"
+                    "openid"
                     "profile"
+                    # keep-sorted end
                   ];
                 };
               };

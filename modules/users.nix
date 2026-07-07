@@ -57,8 +57,10 @@ in
       group = "rvfg";
       hashedPasswordFile = hashedPasswordFile;
       extraGroups = [
-        "systemd-journal"
+        # keep-sorted start
         "input"
+        "systemd-journal"
+        # keep-sorted end
       ];
       openssh.authorizedKeys.keys = self.data.sshPub.authorizedKeys;
     };

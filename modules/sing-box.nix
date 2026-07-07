@@ -74,10 +74,12 @@ in
         // {
           PrivateNetwork = false;
           RestrictAddressFamilies = [
-            "AF_UNIX"
+            # keep-sorted start
             "AF_INET"
             "AF_INET6"
             "AF_NETLINK"
+            "AF_UNIX"
+            # keep-sorted end
           ];
           StateDirectory = "sing-box";
           StateDirectoryMode = "0700";

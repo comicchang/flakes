@@ -14,6 +14,7 @@ in
   programs.fish = {
     enable = true;
     shellAbbrs = {
+      # keep-sorted start
       d = "docker";
       dl = "curl -LJO";
       gitad = "git add";
@@ -31,6 +32,10 @@ in
       gitib = "git init -b main --bare";
       gitl = "git log";
       gitls = "git log --show-signature";
+      gitpl = "git pull";
+      gitps = "git push";
+      gitpsf = "git push -f";
+      gitpsu = "git push -u origin HEAD";
       gitrb = "git rebase";
       gitrs = "git reset";
       gitrsh = "git reset --hard";
@@ -41,16 +46,22 @@ in
       gitsmu = "git submodule update --init --recursive";
       gitss = "git stash";
       gitst = "git status";
-      gitps = "git push";
-      gitpsf = "git push -f";
-      gitpsu = "git push -u origin HEAD";
-      gitpl = "git pull";
       j = "journalctl";
       jb = "journalctl -b 0";
       jp = "journalctl -b 0 -p 4";
       mpvb = "mpv --ytdl-raw-options-append=cookies-from-browser=firefox::bilibili";
       nftadd = "sudo nft add inet nixos-fw input-allow tcp dport";
       nftls = "sudo nft -at list ruleset";
+      r = "systemd-run --user -d -t --wait -G";
+      s = "systemctl";
+      se = "sudoedit";
+      sls = "systemctl list-units --type=service";
+      slt = "systemctl list-timers";
+      suls = "systemctl --user list-units --type=service";
+      sult = "systemctl --user list-timers";
+      sus = "sudo systemctl";
+      v = "nvim";
+      # keep-sorted end
       nixrp = {
         expansion = "nix run nixpkgs#% --";
         setCursor = true;
@@ -61,15 +72,6 @@ in
         setCursor = true;
         position = "anywhere";
       };
-      r = "systemd-run --user -d -t --wait -G";
-      s = "systemctl";
-      se = "sudoedit";
-      sls = "systemctl list-units --type=service";
-      slt = "systemctl list-timers";
-      suls = "systemctl --user list-units --type=service";
-      sult = "systemctl --user list-timers";
-      sus = "sudo systemctl";
-      v = "nvim";
     }
     // (builtins.listToAttrs (
       builtins.genList (
@@ -84,10 +86,12 @@ in
       ) 9
     ));
     shellAliases = {
+      # keep-sorted start
       l = "eza -lag --time-style=long-iso";
-      ll = "eza -lg --time-style=long-iso";
       lg = "eza -lag --git --time-style=long-iso";
+      ll = "eza -lg --time-style=long-iso";
       sl = "sudo eza -lag --time-style=long-iso";
+      # keep-sorted end
     };
     interactiveShellInit = ''
       set fish_greeting

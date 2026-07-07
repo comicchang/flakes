@@ -20,6 +20,7 @@
     presets.cert.enable = true;
 
     home.packages = with pkgs; [
+      # keep-sorted start
       imagemagick
       imv
       inetutils
@@ -39,6 +40,7 @@
       wineWow64Packages.unstableFull
       wl-clipboard
       yubikey-manager
+      # keep-sorted end
     ];
 
     systemd.user.tmpfiles.rules = [

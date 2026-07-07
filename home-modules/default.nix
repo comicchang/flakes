@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    # keep-sorted start
     ./browser.nix
     ./btop.nix
     ./cert.nix
@@ -15,5 +16,6 @@
     ./ssh.nix
     ./starship
     ./workstation.nix
+    # keep-sorted end
   ];
 }

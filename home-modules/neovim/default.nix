@@ -45,12 +45,13 @@ in
       withRuby = false;
       withPython3 = true;
       plugins = with pkgs.vimPlugins; [
+        # keep-sorted start
         bufferline-nvim
         catppuccin-nvim
-        cmp-nvim-lsp
-        cmp_luasnip
         cmp-buffer
+        cmp-nvim-lsp
         cmp-path
+        cmp_luasnip
         editorconfig-nvim
         fzf-lua
         git-blame-nvim
@@ -63,8 +64,10 @@ in
         nvim-tree-lua
         vim-lastplace
         which-key-nvim
+        # keep-sorted end
         (nvim-treesitter.withPlugins (
           plugins: with plugins; [
+            # keep-sorted start
             bash
             beancount
             c
@@ -101,8 +104,8 @@ in
             python
             regex
             requirements
-            rust
             rst
+            rust
             scss
             sql
             ssh_config
@@ -118,6 +121,7 @@ in
             vue
             xml
             yaml
+            # keep-sorted end
           ]
         ))
       ];
