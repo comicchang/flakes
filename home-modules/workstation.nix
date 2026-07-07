@@ -39,6 +39,7 @@
       usbutils
       wineWow64Packages.unstableFull
       wl-clipboard
+      yt-dlp
       yubikey-manager
       # keep-sorted end
     ];
@@ -165,6 +166,8 @@
           end
       end)
     '';
+    home.file.".config/yt-dlp/plugins/bilicdn/yt_dlp_plugins/extractor/bilicdn.py".text =
+      builtins.readFile ./bilicdn.py;
 
     programs.zathura.enable = true;
 
