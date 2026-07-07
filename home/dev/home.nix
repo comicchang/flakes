@@ -54,7 +54,7 @@
     curl
     cursor-cli
     dig
-    docker_28
+    docker
     gcc
     gdb
     home-manager
