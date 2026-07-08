@@ -88,6 +88,7 @@ in
           port = 53;
           ratelimit = 0;
           upstream_dns_file = "/var/lib/AdGuardHome/upstream";
+          upstream_mode = "parallel";
         };
         dhcp.enabled = false;
         user_rules = [ "@@amdc.m.taobao.com" ];
