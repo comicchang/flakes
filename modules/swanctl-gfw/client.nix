@@ -47,9 +47,10 @@ in
         i: peer:
         let
           interfaceId = ifId i;
-          table = 1024 + interfaceId;
         in
         {
+
+          systemd.network.config.routeTables.${ifName peer} = 1024 + interfaceId;
 
           systemd.network.netdevs."25-${ifName peer}" = {
             netdevConfig = {
@@ -71,11 +72,11 @@ in
             routes = [
               {
                 Source = "0.0.0.0/0";
-                Table = table;
+                Table = ifName peer;
               }
               {
                 Source = "::/0";
-                Table = table;
+                Table = ifName peer;
               }
             ];
           };

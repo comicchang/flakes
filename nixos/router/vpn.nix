@@ -37,6 +37,7 @@ in
       "--netfilter-mode=off"
     ];
   };
+  systemd.network.config.routeTables.tailscale = 52;
 
   presets.swanctl = {
     enable = true;

@@ -202,6 +202,15 @@ in
         };
       };
 
+      systemd.network.config.routeTables = filterAttrs (_: v: v != null) (
+        listToAttrs (
+          map (h: {
+            name = "wg-${h}";
+            value = cfg.clientPeers.${h}.table or null;
+          }) (reverseClientPeers ++ clientPeers)
+        )
+      );
+
       systemd.network.netdevs = listToAttrs (
         map (h: {
           name = "25-wg-${h}";

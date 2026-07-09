@@ -75,6 +75,7 @@ in
         };
       })
       {
+        config.routeTables.simns = 10;
         networks."50-${cfg.vethName}" = {
           name = cfg.vethName;
           address = [ "10.6.7.1/24" ];
@@ -96,22 +97,22 @@ in
             UseNTP = false;
             UseSIP = false;
             UseDomains = false;
-            RouteTable = 10;
+            RouteTable = "simns";
           };
           routingPolicyRules = [
             {
               FirewallMark = 3;
-              Table = 10;
+              Table = "simns";
               Priority = 64;
             }
             {
               To = "10.6.8.0/24";
-              Table = 10;
+              Table = "simns";
               Priority = 64;
             }
             {
               From = "10.6.8.2";
-              Table = 10;
+              Table = "simns";
               Priority = 64;
             }
           ];

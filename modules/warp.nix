@@ -74,6 +74,8 @@ in
       wireguard-tools
     ];
 
+    systemd.network.config.routeTables.warp = cfg.table;
+
     networking.nftables.tables.warp = {
       family = "inet";
       content = ''
@@ -108,7 +110,7 @@ in
       wireguardConfig = {
         PrivateKeyFile = cfg.keyFile;
         FirewallMark = cfg.mark;
-        RouteTable = cfg.table;
+        RouteTable = "warp";
       };
       wireguardPeers = [
         {
@@ -127,7 +129,7 @@ in
       routingPolicyRules = [
         {
           FirewallMark = cfg.table;
-          Table = cfg.table;
+          Table = "warp";
           Priority = 1024;
           Family = "both";
         }

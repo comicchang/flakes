@@ -83,13 +83,15 @@ in
     '';
   };
 
+  systemd.network.config.routeTables.tproxy = 200;
+
   systemd.network.networks."20-lo" = {
     name = "lo";
     networkConfig.KeepConfiguration = "static";
     routingPolicyRules = [
       {
         FirewallMark = tproxyMark;
-        Table = 200;
+        Table = "tproxy";
         Family = "both";
         Priority = 512;
       }
@@ -98,12 +100,12 @@ in
       {
         Source = "0.0.0.0/0";
         Scope = "host";
-        Table = 200;
+        Table = "tproxy";
         Type = "local";
       }
       {
         Source = "::/0";
-        Table = 200;
+        Table = "tproxy";
         Type = "local";
       }
     ];
