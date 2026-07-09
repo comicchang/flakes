@@ -6,6 +6,8 @@
 }:
 let
   systemdHarden = self.data.systemdHarden;
+
+  selfSignedHostnames = builtins.attrNames config.presets.nginx.selfSignedVirtualHosts;
 in
 {
   imports = [
@@ -94,6 +96,10 @@ in
   };
 
   networking.hostName = "router";
+  networking.hosts = {
+    "10.8.0.1" = selfSignedHostnames;
+    "fdd0::1" = selfSignedHostnames;
+  };
   networking.firewall = {
     checkReversePath = "loose";
   };
@@ -228,6 +234,7 @@ in
         "http://${config.services.victorialogs.listenAddress}";
       "victoriametrics.rvf6.com".locations."/".proxyPass =
         "http://${config.services.victoriametrics.listenAddress}";
+      "modem.rvf6.com".locations."/".proxyPass = "http://192.168.1.1";
     };
   };
 
