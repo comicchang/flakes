@@ -233,16 +233,24 @@ in
       "radicale.rvf6.com".locations."/".proxyPass = "http://[::1]:5232";
     };
     selfSignedVirtualHosts = {
-      "victorialogs.rvf6.com".locations."/".proxyPass =
-        "http://${config.services.victorialogs.listenAddress}";
+      "victorialogs.rvf6.com".locations."/".proxyPass = "http://unix:/run/victorialogs/sock:/";
       "victoriametrics.rvf6.com".locations."/".proxyPass =
         "http://${config.services.victoriametrics.listenAddress}:/";
       "modem.rvf6.com".locations."/".proxyPass = "http://192.168.1.1";
     };
   };
-  systemd.services.nginx.serviceConfig.SupplementaryGroups = [ "victoriametrics" ];
-  systemd.services.nginx.wants = [ "victoriametrics.service" ];
-  systemd.services.nginx.after = [ "victoriametrics.service" ];
+  systemd.services.nginx.serviceConfig.SupplementaryGroups = [
+    "victoriametrics"
+    "victorialogs"
+  ];
+  systemd.services.nginx.wants = [
+    "victoriametrics.service"
+    "victorialogs.service"
+  ];
+  systemd.services.nginx.after = [
+    "victoriametrics.service"
+    "victorialogs.service"
+  ];
 
   presets.gammu-smsd = {
     enable = false;
@@ -308,6 +316,29 @@ in
       "-retentionPeriod=12w"
     ];
     listenAddress = "[::1]:9428";
+  };
+  systemd.services.victorialogs.serviceConfig = {
+    PrivateNetwork = true;
+    RuntimeDirectoryMode = mkForce "0750";
+  };
+  systemd.services.proxy-to-victorialogs = {
+    requires = [
+      "victorialogs.service"
+      "proxy-to-victorialogs.socket"
+    ];
+    after = [
+      "victorialogs.service"
+      "proxy-to-victorialogs.socket"
+    ];
+    unitConfig.JoinsNamespaceOf = "victorialogs.service";
+    serviceConfig = systemdHarden // {
+      Type = "notify";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ::1:9428";
+    };
+  };
+  systemd.sockets.proxy-to-victorialogs = {
+    wantedBy = [ "sockets.target" ];
+    listenStreams = [ "/run/victorialogs/sock" ];
   };
 
   services.victoriametrics = {
