@@ -1,10 +1,13 @@
 {
   config,
+  lib,
   pkgs,
   self,
   ...
 }:
 let
+  inherit (lib) mkForce;
+
   systemdHarden = self.data.systemdHarden;
 
   selfSignedHostnames = builtins.attrNames config.presets.nginx.selfSignedVirtualHosts;
@@ -233,10 +236,13 @@ in
       "victorialogs.rvf6.com".locations."/".proxyPass =
         "http://${config.services.victorialogs.listenAddress}";
       "victoriametrics.rvf6.com".locations."/".proxyPass =
-        "http://${config.services.victoriametrics.listenAddress}";
+        "http://${config.services.victoriametrics.listenAddress}:/";
       "modem.rvf6.com".locations."/".proxyPass = "http://192.168.1.1";
     };
   };
+  systemd.services.nginx.serviceConfig.SupplementaryGroups = [ "victoriametrics" ];
+  systemd.services.nginx.wants = [ "victoriametrics.service" ];
+  systemd.services.nginx.after = [ "victoriametrics.service" ];
 
   presets.gammu-smsd = {
     enable = false;
@@ -306,10 +312,16 @@ in
 
   services.victoriametrics = {
     enable = true;
-    extraOptions = [
-      "-enableTCP6"
-    ];
-    listenAddress = "[::1]:8428";
+    package = pkgs.victoriametrics.overrideAttrs (prev: {
+      patches = (prev.patches or [ ]) ++ [
+        ./victoriametrics-10331.patch
+      ];
+    });
+    listenAddress = "unix:/run/victoriametrics/sock";
+  };
+  systemd.services.victoriametrics = {
+    postStart = mkForce "";
+    serviceConfig.RuntimeDirectoryMode = mkForce "0750";
   };
 
 }
