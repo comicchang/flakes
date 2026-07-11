@@ -254,14 +254,20 @@ in
           server_port = 8000;
         }
         {
+          type = "http";
+          tag = "jp3";
+          server = "10.5.0.49";
+          server_port = 8000;
+        }
+        {
           type = "selector";
           tag = "download";
           outbounds = [
-            "direct"
             "cn"
             "de"
             "nl"
             "de2"
+            "jp3"
           ];
           default = "nl";
           interrupt_exist_connections = false;
