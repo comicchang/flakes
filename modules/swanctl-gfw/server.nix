@@ -219,6 +219,17 @@ in
           }
         ];
         route.default_domain_resolver = "local";
+        route.rules = [
+          { action = "resolve"; }
+          {
+            ip_cidr = [
+              "127.0.0.1/8"
+              "::1/128"
+            ];
+            action = "reject";
+          }
+          { outbound = "direct"; }
+        ];
       };
     };
   });
