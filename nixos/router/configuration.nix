@@ -17,6 +17,7 @@ in
     # keep-sorted start
     ./cn-slice.nix
     ./dns.nix
+    ./fakesip.nix
     ./home-assistant
     ./lan.nix
     ./mosquitto.nix
