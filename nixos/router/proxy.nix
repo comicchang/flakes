@@ -274,49 +274,64 @@ in
         }
       ];
       route.default_domain_resolver = "local";
-      route.rules = [
-        {
-          inbound = "dns";
-          action = "hijack-dns";
-        }
-        {
-          inbound = "cn-in";
-          domain_suffix = [
-            "googleapis.com"
-          ];
-          outbound = "direct";
-        }
-        {
-          inbound = "cn-in";
-          outbound = "cn";
-        }
-        {
-          domain = downloadDomains;
-          outbound = "download";
-        }
-        {
-          domain_suffix = [
-            "byr.pt"
-            "reddit.com"
-          ];
-          outbound = "warp";
-        }
-        {
-          domain = [ "prod-ingress.ingress.com" ];
-          outbound = "ak";
-        }
-        {
-          domain_suffix = [
-            self.data.ef
-          ];
-          ip_cidr = [
-            "10.9.0.0/16"
-            "10.12.0.0/16"
-            "172.16.0.0/12"
-          ];
-          outbound = "work";
-        }
-      ];
+      route.rules =
+        let
+          rejectLocalhost = {
+            ip_cidr = [
+              "127.0.0.1/8"
+              "::1/128"
+            ];
+            action = "reject";
+          };
+        in
+        [
+          {
+            inbound = "dns";
+            action = "hijack-dns";
+          }
+          {
+            ip_cidr = [ "::1/128" ];
+            network = "udp";
+            port = 11111;
+            outbound = "direct";
+          }
+          # cn-in start
+          {
+            inbound = "cn-in";
+            action = "resolve";
+          }
+          rejectLocalhost
+          {
+            inbound = "cn-in";
+            domain_suffix = [
+              "googleapis.com"
+            ];
+            outbound = "direct";
+          }
+          {
+            inbound = "cn-in";
+            outbound = "cn";
+          }
+          # cn-in end
+          {
+            domain = downloadDomains;
+            outbound = "download";
+          }
+          {
+            domain_suffix = [
+              self.data.ef
+            ];
+            ip_cidr = [
+              "10.9.0.0/16"
+              "10.12.0.0/16"
+              "172.16.0.0/12"
+            ];
+            outbound = "work";
+          }
+          { action = "resolve"; }
+          rejectLocalhost
+          { outbound = "direct"; }
+        ];
       experimental = {
         cache_file = {
           enabled = true;
