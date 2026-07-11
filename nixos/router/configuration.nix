@@ -348,7 +348,18 @@ in
         ./victoriametrics-10331.patch
       ];
     });
+    extraOptions = [
+      "-enableTCP6"
+    ];
     listenAddress = "unix:/run/victoriametrics/sock";
+    prometheusConfig.scrape_configs = [
+      {
+        job_name = "telegraf";
+        static_configs = [
+          { targets = [ "http://[::1]:9273/metrics" ]; }
+        ];
+      }
+    ];
   };
   systemd.services.victoriametrics = {
     postStart = mkForce "";
@@ -363,5 +374,15 @@ in
       })
     ];
   });
+  services.telegraf.extraConfig.inputs.ping = {
+    urls = [
+      "10.5.0.1" # de
+      "10.5.0.17" # nl
+      "10.5.0.33" # de2
+      "10.5.0.49" # jp3
+    ];
+    method = "native";
+    privileged = false;
+  };
 
 }
