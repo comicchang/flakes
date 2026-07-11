@@ -50,12 +50,12 @@ in
           }
 
           chain pre {
-            type filter hook prerouting priority -400;
+            type filter hook prerouting priority mangle - 4;
             goto do-mark
           }
 
           chain out {
-            type route hook output priority -400;
+            type route hook output priority mangle - 4;
             goto do-mark
           }
         '';
@@ -76,12 +76,12 @@ in
           }
 
           chain pre {
-            type filter hook prerouting priority -400;
+            type filter hook prerouting priority mangle - 4;
             goto do-mark
           }
 
           chain out {
-            type route hook output priority -400;
+            type route hook output priority mangle - 4;
             goto do-mark
           }
         '';

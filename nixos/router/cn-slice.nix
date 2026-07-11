@@ -17,7 +17,7 @@
         }
 
         chain out {
-          type route hook output priority -800;
+          type route hook output priority mangle - 8;
           goto do-mark
         }
       '';

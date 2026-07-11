@@ -6,6 +6,8 @@
 }:
 let
   inherit (lib) getExe;
+
+  ports = "4500, 11111";
 in
 {
 
@@ -13,20 +15,24 @@ in
     family = "inet";
     content = ''
       chain pre {
-        type filter hook prerouting priority -405;
+        type filter hook prerouting priority mangle - 8;
         meta mark 8 accept
         iifname ppp0 goto inbound
       }
       chain inbound {
-        fib daddr type local udp dport { 4500, 11111 } goto do-queue
+        icmp type time-exceeded ct reply protocol udp ct reply proto-dst { ${ports} } counter drop
+        icmp type time-exceeded ct original protocol udp ct original proto-dst { ${ports} } counter drop
+        icmpv6 type time-exceeded ct reply protocol udp ct reply proto-dst { ${ports} } counter drop
+        icmpv6 type time-exceeded ct original protocol udp ct original proto-dst { ${ports} } counter drop
+        fib daddr type local udp dport { ${ports} } goto do-queue
       }
       chain post {
-        type filter hook postrouting priority -405;
+        type filter hook postrouting priority mangle - 8;
         meta mark 8 accept
         oifname ppp0 goto outbound
       }
       chain outbound {
-        fib saddr type local udp sport { 4500, 11111 } goto do-queue
+        fib saddr type local udp sport { ${ports} } goto do-queue
       }
       chain do-queue {
         ct packets 1-5 counter queue num 513
