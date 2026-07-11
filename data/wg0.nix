@@ -72,11 +72,6 @@
       pubkey = "+Rdxz9Cc7W+b7jwfLWR9RgF3Sa0mWEunf/tw9lmY8ys=";
       port = 11111;
     };
-    twak = {
-      id = 28;
-      pubkey = "mTvkhDsoj23vjWYNmQmhuc8IjhQxkK/go3Z+wrzkcXc=";
-      port = 11111;
-    };
     jp = {
       id = 29;
       pubkey = "621tcAcrFTv1OJjixoS0XUVZiv8nDhmAfBvuFN4FvCg=";
@@ -134,16 +129,9 @@
         "or3"
         "ak"
         "sg"
-        "twak"
         "jp"
         "jp2"
       ];
-    };
-    twak = {
-      ipv4Pre = "10.6.16.";
-      ipv4Mask = 24;
-      ipv6Pre = "fd66:10::";
-      ipv6Mask = 120;
     };
     or1 = {
       ipv4Pre = "10.6.17.";

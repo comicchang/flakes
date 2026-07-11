@@ -16,7 +16,6 @@ let
     or3 = "age1t7fpg9m0n5cg5vz0fypltc6c7py548uhpyp8f37hmdnq2j73ky9s6cvhgr";
     ak = "age1rvdmtzg5j8298qvtpmq0rwwu6alev5qf3cg36w0j6jcjpyv4lgvqn5ukum";
     sg = "age10akztr0j5e67wfcsv9wtpnsrv2r8sy5us3rc42yt45dg9f54c9rqmzpv57";
-    twak = "age1e0e7xzumxk5e2qvsx8mu9q5vyffvjjkv2f4tn0m2gwaj97jvepnq9nyqf7";
     jp = "age1lexn0h78hhnx6eja2azmv4s8wg99sn20f5jpkq226y9x7eelpuwsqwejdg";
     jp2 = "age1qrawe8zl008qcjjfs9krvrvqww6wzf2wxkumh0h5zr9v5fxr94vsxnkdkv";
     jp3 = "age16v7u8lxyj3wn0fr6rrjh0mtfs85v8wjxefl2kg5mpcav2z920qwsnpuhn5";

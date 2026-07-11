@@ -26,7 +26,6 @@ let
     or3 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOiFV9RY+V9Yc+qtF+Mt7xZIBcYewmgn6dGkORXW5VrE";
     ak = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOH+CAQO3TLPppb3GXE8/2+33kn0ejC1Osx1MMsJvQdd";
     sg = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGrYMbv6EzBWxkluuydLdIaIpLYBjNWtfX0z9shyQRkR";
-    twak = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJwrx9wGDB/AoJyG3s6tX583Da3OO2KmbZJVCbLKdO2i";
     jp = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDkimtHteI020dAw9nMYlUzAAubx7AdsQER7HZGpzDC9";
     jp2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiRBAzCnFCda/VAv/woFnYp2uuT7CGDgvNG7ESgHYlt";
     jp3 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHwu1UYJmBzWNVmxMCgKK/hgA8XCZ1CAzT7uG4fGn04m";
@@ -67,7 +66,6 @@ keys
     "or3"
     "ak"
     "sg"
-    "twak"
     "jp"
     "jp2"
     "jp3"
