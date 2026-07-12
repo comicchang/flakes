@@ -171,11 +171,6 @@
 
     programs.zathura.enable = true;
 
-    services.etesync-dav = {
-      enable = true;
-      serverUrl = "https://ete.rvf6.com/";
-    };
-
     services.kdeconnect = {
       enable = true;
       indicator = true;
