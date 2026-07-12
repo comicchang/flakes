@@ -102,6 +102,7 @@ in
           table = 1024 + (ifId i);
         in
         {
+          config.routeTables.${ifName peer} = table;
           netdevs."25-${ifName peer}" = {
             netdevConfig = {
               Name = ifName peer;
@@ -121,11 +122,11 @@ in
             routes = [
               {
                 Source = "0.0.0.0/0";
-                Table = table;
+                Table = ifName peer;
               }
               {
                 Source = "::/0";
-                Table = table;
+                Table = ifName peer;
               }
             ];
             routingPolicyRules = [
@@ -133,7 +134,7 @@ in
                 FirewallMark = mark;
                 Priority = 64;
                 Family = "both";
-                Table = table;
+                Table = ifName peer;
               }
             ];
           };

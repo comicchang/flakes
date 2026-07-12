@@ -61,6 +61,7 @@ in
   };
 
   systemd.network = {
+    config.routeTables.${interface} = table;
     netdevs."25-${interface}" = {
       netdevConfig = {
         Name = interface;
@@ -80,11 +81,11 @@ in
       routes = [
         {
           Source = "0.0.0.0/0";
-          Table = table;
+          Table = interface;
         }
         {
           Source = "::/0";
-          Table = table;
+          Table = interface;
         }
       ];
       routingPolicyRules = [
@@ -92,7 +93,7 @@ in
           FirewallMark = mark;
           Priority = 64;
           Family = "both";
-          Table = table;
+          Table = interface;
         }
       ];
     };
