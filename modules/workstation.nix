@@ -7,13 +7,16 @@
 }:
 let
   inherit (lib)
-    mkOption
-    mkIf
+    # keep-sorted start
+    concatMapStringsSep
+    elem
+    filterAttrs
     mkDefault
     mkForce
+    mkIf
+    mkOption
     types
-    filterAttrs
-    elem
+    # keep-sorted end
     ;
   directMark = 1;
 in
@@ -248,6 +251,25 @@ in
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
           <fontconfig>
+
+            ${concatMapStringsSep "\n"
+              (font: ''
+                <alias binding="same">
+                  <family>${font}</family>
+                  <prefer>
+                    <family>sans-serif</family>
+                  </prefer>
+                </alias>
+              '')
+              [
+                # keep-sorted start
+                "Arial"
+                "Helvetica"
+                "Noto Sans"
+                "system-ui"
+                # keep-sorted end
+              ]
+            }
 
             <alias>
               <family>Source Code Pro</family>
