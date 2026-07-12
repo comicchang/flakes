@@ -49,7 +49,7 @@ jobs:
           nix build .#devShells.x86_64-linux.default
           for host in nixos/*; do
             host=${host#nixos/}
-            if [[ "$(nix eval .#nixosConfigurations."$host".pkgs.system)" = '"x86_64-linux"' ]]; then
+            if [[ "$(nix eval .#nixosConfigurations."$host".pkgs.stdenv.hostPlatform.system)" = '"x86_64-linux"' ]]; then
               echo "host: $host"
               nix build .#nixosConfigurations."$host".config.system.build.toplevel
             fi
