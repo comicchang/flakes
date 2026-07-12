@@ -2,7 +2,7 @@
   lib,
   source,
   buildPythonPackage,
-  setuptools,
+  setuptools_80,
   ehforwarderbot,
   python-magic,
   pillow,
@@ -19,11 +19,11 @@ buildPythonPackage {
 
   pyproject = true;
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
-    setuptools
+    setuptools_80
     ehforwarderbot
     python-magic
     requests

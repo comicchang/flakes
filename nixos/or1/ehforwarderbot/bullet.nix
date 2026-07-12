@@ -12,10 +12,6 @@ buildPythonPackage {
     setuptools
   ];
 
-  dependencies = [
-    setuptools
-  ];
-
   meta = {
     description = "Beautiful Python Prompts Made Simple";
     homepage = "https://github.com/bchao1/bullet";

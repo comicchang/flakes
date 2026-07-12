@@ -34,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    setuptools
     apscheduler
     cachetools
     certifi

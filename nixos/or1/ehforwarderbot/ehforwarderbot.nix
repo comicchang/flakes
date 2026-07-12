@@ -1,7 +1,7 @@
 {
   source,
   buildPythonPackage,
-  setuptools,
+  setuptools_80,
   ruamel-yaml,
   bullet,
   cjkwrap,
@@ -13,11 +13,11 @@ buildPythonPackage {
 
   pyproject = true;
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
-    setuptools
+    setuptools_80
     ruamel-yaml
     bullet
     cjkwrap

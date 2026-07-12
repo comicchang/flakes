@@ -2,7 +2,7 @@
   lib,
   source,
   buildPythonPackage,
-  setuptools,
+  setuptools_80,
   ehforwarderbot,
   python-telegram-bot,
   python-magic,
@@ -26,11 +26,11 @@ buildPythonPackage {
 
   pyproject = true;
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
-    setuptools
+    setuptools_80
     ehforwarderbot
     python-telegram-bot
     python-magic

@@ -16,7 +16,6 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    setuptools
     requests
     pyqrcode
     pypng
