@@ -383,6 +383,9 @@ in
       "10.5.0.49" # jp3
     ];
     method = "native";
+    count = 10;
+    ping_interval = "0.2s";
+    deadline = "10s";
     privileged = false;
   };
 
