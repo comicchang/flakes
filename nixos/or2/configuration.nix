@@ -1,4 +1,7 @@
 { ... }:
+let
+  ccKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB1a8SSEd+lEdS7VY6XN1YtB9q81c3/hXKACDClphoSE openpgp:0x33333333";
+in
 {
   presets.nogui.enable = true;
   presets.metrics.enable = true;
@@ -21,4 +24,10 @@
   home-manager.users.rvfg = import ./home.nix;
 
   presets.nginx.enable = true;
+
+  users.users.rvfg.openssh.authorizedKeys.keys = [ ccKey ];
+  environment.etc."ssh/pam_rssh_keys.d/rvfg".text = ''
+    ${ccKey}
+  '';
+
 }
