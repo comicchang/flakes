@@ -16,6 +16,12 @@ in
       default = null;
     };
 
+    presets.nginx.quic = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable HTTP/3 and reserve UDP 443 for preset virtual hosts.";
+    };
+
     presets.nginx.virtualHosts = lib.mkOption {
       type = with lib.types; attrsOf attrs;
       default = { };
@@ -35,11 +41,7 @@ in
         443
         # keep-sorted end
       ];
-      allowedUDPPorts = [
-        # keep-sorted start numeric=yes
-        443
-        # keep-sorted end
-      ];
+      allowedUDPPorts = lib.optionals cfg.quic [ 443 ];
     };
 
     security.acme.acceptTerms = true;
@@ -59,15 +61,15 @@ in
             forceSSL = true;
             enableACME = cfg.useACMEHost == null;
             inherit (cfg) useACMEHost;
-            quic = true;
-            http3 = true;
+            quic = cfg.quic;
+            http3 = cfg.quic;
           }
           // value
           // {
             extraConfig = ''
               ${if value ? "extraConfig" then value.extraConfig else ""}
               add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-              add_header Alt-Svc 'h3=":$server_port"; ma=86400';
+              ${lib.optionalString cfg.quic ''add_header Alt-Svc 'h3=":$server_port"; ma=86400';''}
             '';
           }
         ) cfg.virtualHosts
@@ -75,8 +77,8 @@ in
           name: value:
           {
             forceSSL = true;
-            quic = true;
-            http3 = true;
+            quic = cfg.quic;
+            http3 = cfg.quic;
             sslCertificate = config.sops.secrets."pki/rvf6.com.crt".path;
             sslCertificateKey = config.sops.secrets."pki/rvf6.com.key".path;
             sslTrustedCertificate = config.sops.secrets."pki/all-ca".path;
@@ -87,7 +89,7 @@ in
               ${if value ? "extraConfig" then value.extraConfig else ""}
               ssl_verify_client on;
               add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-              add_header Alt-Svc 'h3=":$server_port"; ma=86400';
+              ${lib.optionalString cfg.quic ''add_header Alt-Svc 'h3=":$server_port"; ma=86400';''}
             '';
           }
         ) cfg.selfSignedVirtualHosts);
