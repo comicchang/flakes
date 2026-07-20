@@ -2,10 +2,24 @@
 let
   ccKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB1a8SSEd+lEdS7VY6XN1YtB9q81c3/hXKACDClphoSE openpgp:0x33333333";
   httpTlsListen = [
-    { addr = "0.0.0.0"; port = 80; }
-    { addr = "[::]"; port = 80; }
-    { addr = "127.0.0.1"; port = 4431; ssl = true; }
-    { addr = "[::1]"; port = 4431; ssl = true; }
+    {
+      addr = "0.0.0.0";
+      port = 80;
+    }
+    {
+      addr = "[::]";
+      port = 80;
+    }
+    {
+      addr = "127.0.0.1";
+      port = 4431;
+      ssl = true;
+    }
+    {
+      addr = "[::1]";
+      port = 4431;
+      ssl = true;
+    }
   ];
 in
 {
@@ -22,11 +36,21 @@ in
 
   networking.hostName = "or2";
   networking.firewall = {
-    allowedTCPPorts = [ 255 444 2053 ];
+    allowedTCPPorts = [
+      255
+      444
+      2053
+    ];
     allowedUDPPorts = [ 443 ];
     allowedUDPPortRanges = [
-      { from = 444; to = 450; }
-      { from = 40000; to = 50000; }
+      {
+        from = 444;
+        to = 450;
+      }
+      {
+        from = 40000;
+        to = 50000;
+      }
     ];
     extraForwardRules = lib.mkAfter ''
       iifname "tun0" oifname "ens3" accept comment "ooxxcc OpenVPN egress"
@@ -84,10 +108,21 @@ in
     '';
     virtualHosts."or2.rvf6.com".listen = lib.mkForce httpTlsListen;
     virtualHosts."rvfg.ooxxcc.com" = {
-      listen = lib.mkForce (httpTlsListen ++ [
-        { addr = "0.0.0.0"; port = 2053; ssl = true; }
-        { addr = "[::]"; port = 2053; ssl = true; }
-      ]);
+      listen = lib.mkForce (
+        httpTlsListen
+        ++ [
+          {
+            addr = "0.0.0.0";
+            port = 2053;
+            ssl = true;
+          }
+          {
+            addr = "[::]";
+            port = 2053;
+            ssl = true;
+          }
+        ]
+      );
       locations."/generate_204".return = "204";
       locations."/vlessgrpc".extraConfig = ''
         if ($content_type !~ "application/grpc") { return 404; }
@@ -109,8 +144,14 @@ in
     overrideStrategy = "asDropin";
     wantedBy = [ "machines.target" ];
     serviceConfig = {
-      ExecStart = lib.mkForce [ "" "${pkgs.systemd}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --settings=override --machine=%i --hostname=nspawn-rvfg --capability=CAP_NET_ADMIN,CAP_NET_RAW" ];
-      ExecStop = lib.mkForce [ "" "${pkgs.systemd}/bin/machinectl poweroff %i" ];
+      ExecStart = lib.mkForce [
+        ""
+        "${pkgs.systemd}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --settings=override --machine=%i --hostname=nspawn-rvfg --capability=CAP_NET_ADMIN,CAP_NET_RAW"
+      ];
+      ExecStop = lib.mkForce [
+        ""
+        "${pkgs.systemd}/bin/machinectl poweroff %i"
+      ];
       TimeoutStopSec = "120s";
       MemoryMax = "512M";
       MemorySwapMax = 0;
@@ -123,4 +164,5 @@ in
   environment.etc."ssh/pam_rssh_keys.d/rvfg".text = ''
     ${ccKey}
   '';
+
 }
