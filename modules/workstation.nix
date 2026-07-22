@@ -236,6 +236,7 @@ in
             "Symbols Nerd Font"
           ];
           sansSerif = [
+            "Inter Variable"
             "Inter"
             "Noto Sans CJK SC"
           ];
@@ -251,6 +252,42 @@ in
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
           <fontconfig>
+
+            <match target="scan">
+              <test name="family">
+                <string>Inter Variable</string>
+              </test>
+              <edit name="genericfamily" mode="assign_replace">
+                <const>sans-serif</const>
+              </edit>
+            </match>
+
+            <match target="scan">
+              <test name="family">
+                <string>Inter</string>
+              </test>
+              <edit name="genericfamily" mode="assign_replace">
+                <const>sans-serif</const>
+              </edit>
+            </match>
+
+            <match target="scan">
+              <test name="family">
+                <string>Hack</string>
+              </test>
+              <edit name="genericfamily" mode="assign_replace">
+                <const>monospace</const>
+              </edit>
+            </match>
+
+            <match target="scan">
+              <test name="family">
+                <string>Aleo</string>
+              </test>
+              <edit name="genericfamily" mode="assign_replace">
+                <const>serif</const>
+              </edit>
+            </match>
 
             ${concatMapStringsSep "\n"
               (font: ''
