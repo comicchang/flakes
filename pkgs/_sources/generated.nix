@@ -85,13 +85,13 @@
   };
   midea_auto_cloud = {
     pname = "midea_auto_cloud";
-    version = "v0.4.5";
+    version = "v0.4.12";
     src = fetchFromGitHub {
       owner = "sususweet";
       repo = "midea_auto_cloud";
-      rev = "v0.4.5";
+      rev = "v0.4.12";
       fetchSubmodules = false;
-      sha256 = "sha256-CGZmn/MhFIeq7c2JlyHOzjjYKv5KxVtqXM441NejttY=";
+      sha256 = "sha256-ljx0lqg/hXul4HkL5Ow+CuT8Xln/9qdPKT5Cgp1cdjs=";
     };
   };
   owntracks-frontend = {
