@@ -54,13 +54,13 @@ in
       routingPolicyRules = [
         {
           IncomingInterface = "xfrm-jp3";
-          Priority = 64;
+          Priority = 128;
           Family = "both";
           Table = interface;
         }
         {
           IncomingInterface = "xfrm-jp3-jp2";
-          Priority = 64;
+          Priority = 128;
           Family = "both";
           Table = "xfrm-jp3";
         }

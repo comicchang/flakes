@@ -26,6 +26,8 @@
 
   systemd.network.networks."99-ethernet-default-dhcp".dhcpV4Config.UseMTU = true;
 
+  networking.nftables.masquerade = [ "iifname xfrm-jp3 oifname ens5" ];
+
   home-manager.users.rvfg = import ./home.nix;
 
 }
