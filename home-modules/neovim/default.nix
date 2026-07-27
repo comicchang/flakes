@@ -112,7 +112,6 @@ in
             strace
             svelte
             terraform
-            tmux
             todotxt
             toml
             tsx
