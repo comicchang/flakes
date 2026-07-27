@@ -29,6 +29,9 @@ in
     enable = true;
     config = {
       default_config = { };
+      "automation ui" = "!include automations.yaml";
+      "scene ui" = "!include scenes.yaml";
+      "script ui" = "!include scripts.yaml";
       homeassistant = {
         name = "Home";
         latitude = "!secret latitude";
