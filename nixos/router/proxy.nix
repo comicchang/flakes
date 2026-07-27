@@ -237,12 +237,6 @@ in
         }
         {
           type = "http";
-          tag = "de";
-          server = "10.5.0.1";
-          server_port = 8000;
-        }
-        {
-          type = "http";
           tag = "nl";
           server = "10.5.0.17";
           server_port = 8000;
@@ -264,7 +258,6 @@ in
           tag = "download";
           outbounds = [
             "cn"
-            "de"
             "nl"
             "de2"
             "jp3"

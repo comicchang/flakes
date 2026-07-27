@@ -2,18 +2,6 @@
 # key: suffix
 [
   rec {
-    id = 0;
-    host = "de";
-    key = "";
-    encap = true;
-    masquerade = true;
-    remote = dns.${host}.ipv6;
-    serverIPv4 = "10.5.0.1";
-    serverIPv6 = "fdc0::1";
-    clientIPv4 = "10.5.0.2";
-    clientIPv6 = "fdc0::2";
-  }
-  rec {
     id = 1;
     host = "nl";
     key = "";

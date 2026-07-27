@@ -377,7 +377,6 @@ in
   });
   services.telegraf.extraConfig.inputs.ping = {
     urls = [
-      "10.5.0.1" # de
       "10.5.0.17" # nl
       "10.5.0.33" # de2
       "10.5.0.49" # jp3
