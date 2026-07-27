@@ -9,7 +9,7 @@
 let
   inherit (lib)
     # keep-sorted start
-    imap0
+    map
     mkEnableOption
     mkIf
     mkMerge
@@ -43,10 +43,10 @@ in
           '';
         }
       ]
-      ++ (imap0 (
-        i: peer:
+      ++ (map (
+        peer:
         let
-          interfaceId = ifId i;
+          interfaceId = ifId peer.id;
         in
         {
 

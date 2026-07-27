@@ -13,8 +13,8 @@ let
     concatMap
     concatStringsSep
     filter
-    imap0
     listToAttrs
+    map
     mkEnableOption
     mkIf
     mkMerge
@@ -74,10 +74,10 @@ in
     networking.nftables.tables.interface-mark = {
       family = "inet";
       content = concatStringsSep "\n" (
-        imap0 (
-          i: peer:
+        map (
+          peer:
           let
-            mark = 1024 + (ifId i);
+            mark = 1024 + (ifId peer.id);
           in
           ''
             chain ${ifName peer}-mark {
@@ -95,11 +95,11 @@ in
     };
 
     systemd.network = mkMerge (
-      imap0 (
-        i: peer:
+      map (
+        peer:
         let
-          mark = 1024 + (ifId i);
-          table = 1024 + (ifId i);
+          mark = 1024 + (ifId peer.id);
+          table = 1024 + (ifId peer.id);
         in
         {
           config.routeTables.${ifName peer} = table;
@@ -109,7 +109,7 @@ in
               Kind = "xfrm";
             };
             xfrmConfig = {
-              InterfaceId = ifId i;
+              InterfaceId = ifId peer.id;
               Independent = true;
             };
           };
@@ -145,7 +145,7 @@ in
     services.strongswan-swanctl = {
       enable = true;
       swanctl.connections = listToAttrs (
-        imap0 (i: peer: {
+        map (peer: {
           name = peerKey peer;
           value = {
             inherit proposals;
@@ -176,8 +176,8 @@ in
             encap = peer.encap;
             mobike = false;
             version = 2;
-            if_id_in = toString (ifId i);
-            if_id_out = toString (ifId i);
+            if_id_in = toString (ifId peer.id);
+            if_id_out = toString (ifId peer.id);
           };
         }) serverPeers
       );

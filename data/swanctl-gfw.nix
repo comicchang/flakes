@@ -2,6 +2,7 @@
 # key: suffix
 [
   rec {
+    id = 0;
     host = "de";
     key = "";
     encap = true;
@@ -13,6 +14,7 @@
     clientIPv6 = "fdc0::2";
   }
   rec {
+    id = 1;
     host = "nl";
     key = "";
     encap = true;
@@ -24,6 +26,7 @@
     clientIPv6 = "fdc0::12";
   }
   rec {
+    id = 2;
     host = "de2";
     key = "";
     encap = true;
@@ -35,6 +38,7 @@
     clientIPv6 = "fdc0::22";
   }
   rec {
+    id = 3;
     host = "jp3";
     key = "";
     encap = true;
