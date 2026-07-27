@@ -31,6 +31,7 @@ with lib;
       auto-allocate-uids = mkDefault true;
       use-cgroups = mkDefault true;
       nix-path = [ "nixpkgs=${inputs.nixpkgs}" ];
+      max-substitution-jobs = 32;
     };
     gc = {
       automatic = true;
