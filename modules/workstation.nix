@@ -300,6 +300,7 @@ in
               '')
               [
                 # keep-sorted start
+                "-apple-system"
                 "Arial"
                 "Helvetica"
                 "Noto Sans"
