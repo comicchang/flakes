@@ -20,7 +20,7 @@
   systemd.network.networks."10-ens3" = {
     name = "ens3";
     address = [
-      "2a11:8083:11:22c9::64/64"
+      "2a11:8083:11:18d7::a/64"
       "167.253.159.33/25"
     ];
     dns = [
