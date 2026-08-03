@@ -11,7 +11,6 @@ in
     device = "/dev/sda";
   };
   presets.nginx.enable = true;
-  presets.users.hashedPasswordFile = null;
 
   networking.hostName = "sh";
 
