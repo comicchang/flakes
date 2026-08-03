@@ -30,6 +30,7 @@ let
     jp2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiRBAzCnFCda/VAv/woFnYp2uuT7CGDgvNG7ESgHYlt";
     jp3 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHwu1UYJmBzWNVmxMCgKK/hgA8XCZ1CAzT7uG4fGn04m";
     de2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINFRJWj1+b3XGPqOJo5yOeFREn7Vt52H1Ev2Gv/LRyKA";
+    sh = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA6PTzhR+KGkNWU30vI8WTfUMItU0gE3GoMJ/R0hGy0H";
 
     github = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
 
@@ -69,6 +70,7 @@ keys
     "jp2"
     "jp3"
     "de2"
+    "sh"
   ];
 
   rootHosts = [

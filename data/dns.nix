@@ -48,4 +48,8 @@
     fqdn = "de2.rvf6.com";
     ipv4 = "82.115.30.220";
   };
+  sh = {
+    fqdn = "sh.rvf6.com";
+    ipv6 = "240e:96c:7100:1fe:185:68f3:195c:ff41";
+  };
 }
