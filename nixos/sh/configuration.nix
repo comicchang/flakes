@@ -11,6 +11,15 @@ in
     device = "/dev/sda";
   };
   presets.nginx.enable = true;
+  presets.swanctl-gfw.enableServer = true;
+
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.secrets = {
+    "pki/ca".mode = "0444";
+    "pki/ybk".mode = "0444";
+    "pki/sh-bundle" = { };
+    "pki/sh-pkcs8-key" = { };
+  };
 
   networking.hostName = "sh";
 

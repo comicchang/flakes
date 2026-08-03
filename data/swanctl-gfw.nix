@@ -37,4 +37,16 @@
     clientIPv4 = "10.5.0.50";
     clientIPv6 = "fdc0::32";
   }
+  rec {
+    id = 4;
+    host = "sh";
+    key = "";
+    encap = false;
+    masquerade = true;
+    remote = dns.${host}.ipv6;
+    serverIPv4 = "10.5.0.1";
+    serverIPv6 = "fdc0::1";
+    clientIPv4 = "10.5.0.2";
+    clientIPv6 = "fdc0::2";
+  }
 ]
