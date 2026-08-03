@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib)
     # keep-sorted start
@@ -39,6 +44,23 @@ in
         };
 
     fileSystems."/persist".neededForBoot = true;
+
+    # Workaround
+    disko.imageBuilder.pkgs = pkgs.extend (
+      _final: prev: {
+        vmTools = prev.vmTools // {
+          override =
+            args:
+            prev.vmTools.override (
+              args
+              // {
+                kernel = config.boot.kernelPackages.kernel;
+                kernelModules = args.kernelModules or args.kernel or config.boot.kernelPackages.kernel;
+              }
+            );
+        };
+      }
+    );
 
     disko.devices = {
       nodev."/" = {
