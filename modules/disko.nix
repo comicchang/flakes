@@ -73,7 +73,7 @@ in
       };
       disk.main = {
         type = "disk";
-        imageSize = "2G";
+        imageSize = "3G";
         device = cfg.device;
         content = {
           type = "gpt";
