@@ -20,6 +20,7 @@
     encap = true;
     masquerade = true;
     remote = dns.${host}.ipv4;
+    mtu = 1414;
     serverIPv4 = "10.5.0.33";
     serverIPv6 = "fdc0::21";
     clientIPv4 = "10.5.0.34";
