@@ -13,6 +13,7 @@ let
     mkEnableOption
     mkIf
     mkMerge
+    optionalAttrs
     # keep-sorted end
     ;
 
@@ -56,7 +57,8 @@ in
             netdevConfig = {
               Name = ifName peer;
               Kind = "xfrm";
-            };
+            }
+            // (optionalAttrs (peer ? mtu) { MTUBytes = peer.mtu; });
             xfrmConfig = {
               InterfaceId = interfaceId;
               Independent = true;
