@@ -378,12 +378,13 @@ in
   });
   services.telegraf.extraConfig.inputs.ping = {
     urls = [
+      "10.5.0.5" # g2
       "10.5.0.17" # nl
       "10.5.0.33" # de2
       "10.5.0.49" # jp3
     ];
     method = "native";
-    count = 10;
+    count = 5;
     ping_interval = "0.2s";
     deadline = "10s";
     privileged = false;
