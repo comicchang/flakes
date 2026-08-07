@@ -8,7 +8,15 @@
     device = "/dev/sda";
   };
   presets.nginx.enable = true;
-  presets.users.hashedPasswordFile = null;
+  presets.swanctl-gfw.enableServer = true;
+
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.secrets = {
+    "pki/ca".mode = "0444";
+    "pki/ybk".mode = "0444";
+    "pki/g2-bundle" = { };
+    "pki/g2-pkcs8-key" = { };
+  };
 
   networking.hostName = "g2";
 

@@ -49,4 +49,16 @@
     clientIPv4 = "10.5.0.2";
     clientIPv6 = "fdc0::2";
   }
+  rec {
+    id = 5;
+    host = "g2";
+    key = "";
+    encap = true;
+    masquerade = true;
+    remote = dns.${host}.ipv4;
+    serverIPv4 = "10.5.0.5";
+    serverIPv6 = "fdc0::5";
+    clientIPv4 = "10.5.0.6";
+    clientIPv6 = "fdc0::6";
+  }
 ]

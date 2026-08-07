@@ -21,6 +21,7 @@ let
     jp3 = "age16v7u8lxyj3wn0fr6rrjh0mtfs85v8wjxefl2kg5mpcav2z920qwsnpuhn5";
     de2 = "age1tntyd0uuwzngqn90ch657zae87y87jwgpvj7alu2k3d395ru7dcq8w0039";
     sh = "age1l8ll9x597hylt67pxnj5njxw69geu6u4kmqe0cvhag0qwwca6c6qvh00su";
+    g2 = "age1p0zk8hsck6jplwam9e5dajqguvnkcq2ap2xzkh332q7jy46v4uds3k7w9g";
     nixctnr = "age192t8u22pq3yhwr7u8zrg38kdxvsxk7n7h4wykjgnsz6u2zx3effqdsmdhc";
   };
 
