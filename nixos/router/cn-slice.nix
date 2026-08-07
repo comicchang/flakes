@@ -13,7 +13,7 @@
 
         chain do-mark {
           fib daddr type local accept
-          socket cgroupv2 level 1 @slice mark 0 mark set 1
+          socket cgroupv2 level 1 @slice mark 0 mark set 65536
         }
 
         chain out {

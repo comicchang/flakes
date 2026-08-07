@@ -166,7 +166,7 @@ in
           install_routes = no
           plugins {
             socket-default {
-              fwmark = 1
+              fwmark = 65536
             }
           }
         }
