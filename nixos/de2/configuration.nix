@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
 
   presets.nogui.enable = true;
@@ -15,6 +15,7 @@
     "pki/ybk".mode = "0444";
     "pki/de2-bundle" = { };
     "pki/de2-pkcs8-key" = { };
+    warp_key.owner = "systemd-network";
   };
 
   boot.kernel.sysctl = {
@@ -41,6 +42,20 @@
       }
     ];
   };
+
+  networking.warp = {
+    enable = true;
+    endpointAddr = "162.159.192.1";
+    mtu = 1400;
+    routingId = "0x2a7b63";
+    keyFile = config.sops.secrets.warp_key.path;
+    address = [
+      "172.16.0.2/32"
+      "2606:4700:110:869b:7086:6af0:c2ba:d279/128"
+    ];
+    table = 20;
+  };
+  systemd.network.networks."25-warp".routes = [ { Source = "::/0"; } ];
 
   home-manager.users.rvfg = import ./home.nix;
 
