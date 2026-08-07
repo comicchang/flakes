@@ -49,6 +49,18 @@ in
     }
   ];
 
+  systemd.network.networks."25-xfrm-de2".routingPolicyRules =
+    map
+      (ip: {
+        To = ip;
+        Table = "xfrm-de2";
+        Priority = 128;
+      })
+      [
+        self.data.dns.de2.ipv4
+        self.data.dns.nl.ipv4
+      ];
+
   sops.defaultSopsFile = ./secrets.yaml;
   sops.secrets = {
     initrd_ssh_host_ed25519_key = { };

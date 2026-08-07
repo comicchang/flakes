@@ -7,6 +7,7 @@
   ...
 }:
 let
+
   inherit (lib) mkForce concatStringsSep concatMapStringsSep;
 
   fakeIPv4 = "198.18.0.0/15";
@@ -40,6 +41,13 @@ let
     "updates-http.cdn-apple.com"
     "updates.cdn-apple.com"
   ];
+
+  EUDomains = [
+    "splatoon.oatmealdome.me"
+  ];
+
+  fakeDNSDomains = downloadDomains ++ EUDomains;
+
 in
 {
 
@@ -112,7 +120,7 @@ in
   };
 
   presets.adguardhome.extraUpstream = ''
-    [/${concatStringsSep "/" downloadDomains}/][::1]:2053
+    [/${concatStringsSep "/" fakeDNSDomains}/][::1]:2053
   '';
 
   systemd.services.sing-box.serviceConfig.LoadCredential = [
@@ -236,24 +244,6 @@ in
           server_port = 1080;
         }
         {
-          type = "http";
-          tag = "nl";
-          server = "10.5.0.17";
-          server_port = 8000;
-        }
-        {
-          type = "http";
-          tag = "de2";
-          server = "10.5.0.33";
-          server_port = 8000;
-        }
-        {
-          type = "http";
-          tag = "jp3";
-          server = "10.5.0.49";
-          server_port = 8000;
-        }
-        {
           type = "selector";
           tag = "download";
           outbounds = [
@@ -261,11 +251,39 @@ in
             "nl"
             "de2"
             "jp3"
+            "g2"
           ];
-          default = "nl";
+          default = "de2";
           interrupt_exist_connections = false;
         }
-      ];
+        {
+          type = "selector";
+          tag = "eu";
+          outbounds = [
+            "nl"
+            "de2"
+            "jp3"
+            "g2"
+          ];
+          default = "de2";
+          interrupt_exist_connections = false;
+        }
+      ]
+      ++ (map (
+        peer:
+        let
+          inherit (import ../../modules/swanctl-gfw/common.nix { inherit config lib self; })
+            peerKey
+            proxyPort
+            ;
+        in
+        {
+          type = "http";
+          tag = peerKey peer;
+          server = peer.serverIPv4;
+          server_port = proxyPort;
+        }
+      ) self.data.swanctl-gfw);
       route.default_domain_resolver = "local";
       route.rules =
         let
@@ -307,8 +325,12 @@ in
           }
           # cn-in end
           {
-            domain = downloadDomains;
+            domain_suffix = downloadDomains;
             outbound = "download";
+          }
+          {
+            domain_suffix = EUDomains;
+            outbound = "eu";
           }
           {
             domain_suffix = [

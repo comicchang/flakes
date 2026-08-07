@@ -98,7 +98,7 @@ in
                 children.${peerKey peer} = {
                   start_action = "trap|start";
                   esp_proposals = proposals;
-                  set_mark_out = "1";
+                  set_mark_out = "65536";
                   local_ts = [
                     "::/0"
                     "0.0.0.0/0"
