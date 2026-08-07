@@ -35,16 +35,16 @@ in
   presets.metrics.enable = true;
   presets.swanctl-gfw.enableClient = true;
 
-  systemd.network.networks."25-xfrm-jp3".routingPolicyRules = [
+  systemd.network.networks."25-xfrm-g2".routingPolicyRules = [
     {
       FirewallMark = 2;
-      Table = 1024 + 16 + 3;
+      Table = "xfrm-g2";
       Priority = 16384;
       Family = "both";
     }
     {
       To = "2001:da8:215:4078:250:56ff:fe97:654d"; # byr.pt
-      Table = 1024 + 16 + 3;
+      Table = "xfrm-g2";
       Priority = 128;
     }
   ];
