@@ -59,6 +59,7 @@ in
       [
         self.data.dns.de2.ipv4
         self.data.dns.nl.ipv4
+        self.data.dns.nl.ipv6
       ];
 
   sops.defaultSopsFile = ./secrets.yaml;

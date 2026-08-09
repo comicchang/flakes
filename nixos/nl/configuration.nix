@@ -10,6 +10,10 @@ let
 in
 {
 
+  imports = [
+    ./swanctl.nix
+  ];
+
   presets.nogui.enable = true;
   presets.metrics.enable = true;
   presets.swanctl-gfw.enableServer = true;
