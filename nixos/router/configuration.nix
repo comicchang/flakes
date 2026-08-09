@@ -90,15 +90,8 @@ in
     luci-nginx-add-auth.owner = config.services.nginx.user;
     sim-pin = { };
     tg-bot-token = { };
-    "tuic/uuid" = { };
-    "tuic/password" = { };
-    "tuic/tls_cert" = { };
-    "tuic/tls_key" = { };
-    "tuic/ech_key" = { };
     tailscale_auth_key = { };
-    shadowsocks = { };
     radicale = { };
-    sing-box-api-secret = { };
   };
   systemd.services.sops-install-secrets.before = [ "sysinit.target" ];
 

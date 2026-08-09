@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
 
   imports = [
@@ -19,6 +19,7 @@
     "pki/ybk".mode = "0444";
     "pki/jp2-bundle" = { };
     "pki/jp2-pkcs8-key" = { };
+    shadowsocks = { };
   };
 
   networking.hostName = "jp2";
@@ -49,6 +50,13 @@
   presets.wireguard.wg0 = {
     enable = true;
     mtu = 1400;
+  };
+
+  presets.shadowsocks = {
+    enable = true;
+    settings.server_port = 13926;
+    passwordFile = config.sops.secrets.shadowsocks.path;
+    openFirewall = true;
   };
 
   home-manager.users.rvfg = import ./home.nix;

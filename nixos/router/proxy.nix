@@ -45,10 +45,25 @@ let
     "splatoon.oatmealdome.me"
   ];
 
-  fakeDNSDomains = downloadDomains ++ EUDomains;
+  redditDomains = [
+    "www.reddit.com"
+  ];
+
+  fakeDNSDomains = downloadDomains ++ EUDomains ++ redditDomains;
 
 in
 {
+
+  sops.secrets = {
+    sing-box-api-secret = { };
+    "tuic/uuid" = { };
+    "tuic/password" = { };
+    "tuic/tls_cert" = { };
+    "tuic/tls_key" = { };
+    "tuic/ech_key" = { };
+    shadowsocks = { };
+    shadowsocks-jp2 = { };
+  };
 
   networking.firewall = {
     allowedUDPPorts = [
@@ -128,6 +143,7 @@ in
     "tls_key:${config.sops.secrets."tuic/tls_key".path}"
     "ech_key:${config.sops.secrets."tuic/ech_key".path}"
     "api_secret:${config.sops.secrets."sing-box-api-secret".path}"
+    "shadowsocks-jp2:${config.sops.secrets.shadowsocks-jp2.path}"
   ];
 
   presets.sing-box = {
@@ -236,6 +252,14 @@ in
           routing_mark = 100 + self.data.wg0.peers.ak.id;
         }
         {
+          type = "shadowsocks";
+          tag = "jp2";
+          server = self.data.dns.jp2.ipv6;
+          server_port = 13926;
+          method = "2022-blake3-aes-256-gcm";
+          password._secret = "/run/credentials/sing-box.service/shadowsocks-jp2";
+        }
+        {
           type = "socks";
           tag = "work";
           server = "work.rvf6.com";
@@ -329,6 +353,10 @@ in
           {
             domain_suffix = EUDomains;
             outbound = "eu";
+          }
+          {
+            domain_suffix = redditDomains;
+            outbound = "jp2";
           }
           {
             domain_suffix = [
