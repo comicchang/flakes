@@ -47,10 +47,6 @@ in
       25 # SMTP
       465 # SMTPS
       993 # IMAPS
-      ssPort
-    ];
-    allowedUDPPorts = [
-      ssPort
     ];
   };
 
@@ -104,6 +100,7 @@ in
       method = "chacha20-ietf-poly1305";
     };
     passwordFile = config.sops.secrets.shadowsocks.path;
+    openFirewall = true;
   };
 
   services.transmission = {

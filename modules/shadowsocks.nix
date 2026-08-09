@@ -60,12 +60,22 @@ in
       default = null;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
   };
 
   config = mkIf cfg.enable {
 
     presets.shadowsocks.settings.password = mkIf replacePassword {
       _secret = "/run/credentials/shadowsocks.service/shadowsocks";
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.settings.server_port ];
+      allowedUDPPorts = [ cfg.settings.server_port ];
     };
 
     systemd.services.shadowsocks = {

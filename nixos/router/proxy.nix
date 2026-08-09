@@ -53,7 +53,6 @@ in
   networking.firewall = {
     allowedUDPPorts = [
       tuicPort
-      ssPort
     ];
     extraInputRules = ''
       iifname @wan_enabled_ifs tcp dport { ${
@@ -365,6 +364,7 @@ in
     enable = true;
     settings.server_port = ssPort;
     passwordFile = config.sops.secrets.shadowsocks.path;
+    openFirewall = true;
   };
 
   # TODO
