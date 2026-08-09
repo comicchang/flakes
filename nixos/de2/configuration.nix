@@ -55,7 +55,7 @@
     ];
     table = 20;
   };
-  systemd.network.networks."25-warp".routes = [ { Source = "::/0"; } ];
+  #systemd.network.networks."25-warp".routes = [ { Source = "::/0"; } ];
 
   home-manager.users.rvfg = import ./home.nix;
 
