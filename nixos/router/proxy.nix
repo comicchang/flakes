@@ -3,7 +3,6 @@
   lib,
   pkgs,
   self,
-  utils,
   ...
 }:
 let
@@ -362,23 +361,10 @@ in
     };
   };
 
-  systemd.services.shadowsocks-rust = {
-    serviceConfig = self.data.systemdHarden // {
-      PrivateNetwork = false;
-      LoadCredential = [ "shadowsocks:${config.sops.secrets."shadowsocks".path}" ];
-      RuntimeDirectory = "shadowsocks-rust";
-      RuntimeDirectoryMode = "0700";
-      ExecStartPre = pkgs.writeShellScript "shadowsocks-replace-secrets" (
-        utils.genJqSecretsReplacementSnippet {
-          server = "::";
-          server_port = ssPort;
-          password._secret = "/run/credentials/shadowsocks-rust.service/shadowsocks";
-          method = "2022-blake3-aes-256-gcm";
-        } "/run/shadowsocks-rust/config.json"
-      );
-      ExecStart = "${pkgs.shadowsocks-rust}/bin/ssserver -c \${RUNTIME_DIRECTORY}/config.json";
-    };
-    wantedBy = [ "multi-user.target" ];
+  presets.shadowsocks = {
+    enable = true;
+    settings.server_port = ssPort;
+    passwordFile = config.sops.secrets.shadowsocks.path;
   };
 
   # TODO

@@ -8,11 +8,14 @@
 }:
 let
   inherit (lib)
-    mkOption
+    # keep-sorted start
+    getExe'
     mkEnableOption
     mkIf
+    mkOption
     optionalAttrs
     types
+    # keep-sorted end
     ;
 
   cfg = config.presets.shadowsocks;
@@ -36,6 +39,19 @@ in
     settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
+        options = {
+          server = mkOption {
+            type = types.str;
+            default = "::";
+          };
+          server_port = mkOption {
+            type = types.port;
+          };
+          method = mkOption {
+            type = types.str;
+            default = "2022-blake3-aes-256-gcm";
+          };
+        };
       };
     };
 
@@ -58,7 +74,7 @@ in
         LoadCredential = mkIf replacePassword "shadowsocks:${cfg.passwordFile}";
         RuntimeDirectory = mkIf replacePassword "shadowsocks";
         RuntimeDirectoryMode = "0700";
-        ExecStart = "${pkgs.shadowsocks-rust}/bin/${cfg.exeName} -c ${
+        ExecStart = "${getExe' pkgs.shadowsocks-rust cfg.exeName} -c ${
           if replacePassword then runtimeConfigFile else configFile
         }";
       };

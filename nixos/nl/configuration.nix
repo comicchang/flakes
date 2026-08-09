@@ -100,7 +100,6 @@ in
   presets.shadowsocks = {
     enable = true;
     settings = {
-      server = "::";
       server_port = ssPort;
       method = "chacha20-ietf-poly1305";
     };
