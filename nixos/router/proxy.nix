@@ -41,6 +41,17 @@ let
     "updates.cdn-apple.com"
   ];
 
+  msDomains = [
+    "software-download.microsoft.com"
+    "delivery.mp.microsoft.com"
+    "download.prss.microsoft.com"
+    "update.microsoft.com"
+    "windowsupdate.com"
+    "packages.microsoft.com"
+    "windowsupdate.microsoft.com"
+    "download.microsoft.com"
+  ];
+
   EUDomains = [
     "splatoon.oatmealdome.me"
   ];
@@ -49,7 +60,7 @@ let
     "www.reddit.com"
   ];
 
-  fakeDNSDomains = downloadDomains ++ EUDomains ++ redditDomains;
+  fakeDNSDomains = downloadDomains ++ msDomains ++ EUDomains ++ redditDomains;
 
 in
 {
@@ -280,6 +291,18 @@ in
         }
         {
           type = "selector";
+          tag = "ms";
+          outbounds = [
+            "cn"
+            "nl"
+            "de2"
+            "jp3"
+          ];
+          default = "cn";
+          interrupt_exist_connections = true;
+        }
+        {
+          type = "selector";
           tag = "eu";
           outbounds = [
             "nl"
@@ -349,6 +372,10 @@ in
           {
             domain_suffix = downloadDomains;
             outbound = "download";
+          }
+          {
+            domain_suffix = msDomains;
+            outbound = "ms";
           }
           {
             domain_suffix = EUDomains;
