@@ -40,7 +40,10 @@ in
       };
     };
 
-    services.userborn.enable = true;
+    services.userborn = {
+      enable = true;
+      passwordFilesLocation = "/var/lib/nixos";
+    };
 
     users.users.root.hashedPasswordFile = hashedPasswordFile;
 
