@@ -1,4 +1,7 @@
-{ config, ... }:
+{ config, lib, ... }:
+let
+  inherit (lib) mkForce;
+in
 {
 
   presets.nogui.enable = true;
@@ -8,6 +11,10 @@
   sops.secrets = {
     "wireguard_key".owner = "systemd-network";
     pocket-id-encryption-key.owner = config.services.pocket-id.user;
+    "miniflux/admin_username" = { };
+    "miniflux/admin_password" = { };
+    "miniflux/oauth2_client_id" = { };
+    "miniflux/oauth2_client_secret" = { };
   };
 
   networking.hostName = "jp";
@@ -74,15 +81,45 @@
     };
   };
 
+  services.miniflux = {
+    enable = true;
+    config = {
+      CREATE_ADMIN = false; # workaround assertions
+      LISTEN_ADDR = "%t/%p/%p";
+      ADMIN_USERNAME_FILE = "%d/admin_username";
+      ADMIN_PASSWORD_FILE = "%d/admin_password";
+      POLLING_FREQUENCY = "30";
+      POLLING_PARSING_ERROR_LIMIT = "16";
+      HTTP_CLIENT_TIMEOUT = "60";
+      OAUTH2_PROVIDER = "oidc";
+      OAUTH2_CLIENT_ID_FILE = "%d/oauth2_client_id";
+      OAUTH2_CLIENT_SECRET_FILE = "%d/oauth2_client_secret";
+      OAUTH2_REDIRECT_URL = "https://rss.rvf6.com/oauth2/oidc/callback";
+      OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://pocket-id.rvf6.com";
+    };
+  };
+  systemd.services.miniflux = {
+    before = [ "nginx.service" ];
+    environment.CREATE_ADMIN = mkForce "1";
+    serviceConfig.LoadCredential = [
+      "admin_username:${config.sops.secrets."miniflux/admin_username".path}"
+      "admin_password:${config.sops.secrets."miniflux/admin_password".path}"
+      "oauth2_client_id:${config.sops.secrets."miniflux/oauth2_client_id".path}"
+      "oauth2_client_secret:${config.sops.secrets."miniflux/oauth2_client_secret".path}"
+    ];
+  };
+
   presets.nginx = {
     enable = true;
     virtualHosts = {
       "pocket-id.rvf6.com".locations."/".proxyPass =
         "http://unix:${config.services.pocket-id.settings.UNIX_SOCKET}:/";
+      "rss.rvf6.com".locations."/".proxyPass = "http://unix:/run/miniflux/miniflux:/";
     };
   };
   systemd.services.nginx.serviceConfig.SupplementaryGroups = [
     config.services.pocket-id.group
+    "miniflux"
   ];
 
 }

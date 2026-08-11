@@ -6,7 +6,6 @@
   sops.defaultSopsFile = ./secrets.yaml;
   sops.secrets = {
     "wireguard_key".owner = "systemd-network";
-    "miniflux" = { };
   };
 
   boot.loader.grub = {
@@ -48,34 +47,6 @@
 
   home-manager.users.rvfg = import ./home.nix;
 
-  presets.nginx = {
-    enable = true;
-    virtualHosts = {
-      "rss.rvf6.com".locations."/".proxyPass = "http://unix:/run/miniflux/miniflux:/";
-    };
-  };
-  systemd.services.nginx.serviceConfig.SupplementaryGroups = [ "miniflux" ];
-  systemd.services.nginx.wants = [ "miniflux.service" ];
-  systemd.services.nginx.after = [ "miniflux.service" ];
-
-  services.miniflux = {
-    enable = true;
-    adminCredentialsFile = config.sops.secrets.miniflux.path;
-    config = {
-      LISTEN_ADDR = "%t/%p/%p";
-      POLLING_FREQUENCY = "30";
-      POLLING_PARSING_ERROR_LIMIT = "16";
-      HTTP_CLIENT_TIMEOUT = "60";
-      OAUTH2_PROVIDER = "oidc";
-      OAUTH2_CLIENT_ID = "miniflux";
-      OAUTH2_REDIRECT_URL = "https://rss.rvf6.com/oauth2/oidc/callback";
-      OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://id.rvf6.com/realms/rvfg";
-    };
-  };
-  systemd.services.miniflux.serviceConfig = {
-    LoadCredential = "miniflux.conf:${config.sops.secrets.miniflux.path}";
-    ExecStart = lib.mkForce "${lib.getExe config.services.miniflux.package} -c \${CREDENTIALS_DIRECTORY}/miniflux.conf";
-    EnvironmentFile = lib.mkForce "";
-  };
+  presets.nginx.enable = true;
 
 }
