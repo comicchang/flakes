@@ -50,10 +50,14 @@ in
     services.nginx = {
       enable = true;
       package = pkgs.nginxMainline;
+      recommendedBrotliSettings = true;
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
+      appendHttpConfig = ''
+        access_log syslog:server=unix:/dev/log;
+      '';
       virtualHosts =
         builtins.mapAttrs (
           name: value:
@@ -63,6 +67,7 @@ in
             inherit (cfg) useACMEHost;
             quic = cfg.quic;
             http3 = cfg.quic;
+            kTLS = true;
           }
           // value
           // {
@@ -79,6 +84,7 @@ in
             forceSSL = true;
             quic = cfg.quic;
             http3 = cfg.quic;
+            kTLS = true;
             sslCertificate = config.sops.secrets."pki/rvf6.com.crt".path;
             sslCertificateKey = config.sops.secrets."pki/rvf6.com.key".path;
             sslTrustedCertificate = config.sops.secrets."pki/all-ca".path;
