@@ -5,35 +5,49 @@
   ...
 }:
 let
+  inherit (lib)
+    # keep-sorted start
+    mkEnableOption
+    mkIf
+    mkOption
+    optionalString
+    optionals
+    types
+    # keep-sorted end
+    ;
+
   cfg = config.presets.nginx;
+
+  HSTSLine = ''add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;'';
+  AltSvcH3Line = ''add_header Alt-Svc 'h3=":$server_port"; ma=86400';'';
 in
 {
   options = {
-    presets.nginx.enable = lib.mkEnableOption "Nginx template";
+    presets.nginx.enable = mkEnableOption "Nginx template";
 
-    presets.nginx.useACMEHost = lib.mkOption {
-      type = with lib.types; nullOr str;
+    presets.nginx.useACMEHost = mkOption {
+      type = with types; nullOr str;
       default = null;
     };
 
-    presets.nginx.quic = lib.mkOption {
-      type = lib.types.bool;
+    presets.nginx.quic = mkOption {
+      type = types.bool;
       default = true;
       description = "Enable HTTP/3 and reserve UDP 443 for preset virtual hosts.";
     };
 
-    presets.nginx.virtualHosts = lib.mkOption {
-      type = with lib.types; attrsOf attrs;
+    presets.nginx.virtualHosts = mkOption {
+      type = with types; attrsOf attrs;
       default = { };
     };
 
-    presets.nginx.selfSignedVirtualHosts = lib.mkOption {
-      type = with lib.types; attrsOf attrs;
+    presets.nginx.selfSignedVirtualHosts = mkOption {
+      type = with types; attrsOf attrs;
       default = { };
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     networking.firewall = {
       allowedTCPPorts = [
         # keep-sorted start numeric=yes
@@ -41,7 +55,7 @@ in
         443
         # keep-sorted end
       ];
-      allowedUDPPorts = lib.optionals cfg.quic [ 443 ];
+      allowedUDPPorts = optionals cfg.quic [ 443 ];
     };
 
     security.acme.acceptTerms = true;
@@ -72,9 +86,9 @@ in
           // value
           // {
             extraConfig = ''
-              ${if value ? "extraConfig" then value.extraConfig else ""}
-              add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-              ${lib.optionalString cfg.quic ''add_header Alt-Svc 'h3=":$server_port"; ma=86400';''}
+              ${optionalString (value ? "extraConfig") value.extraConfig}
+              ${HSTSLine}
+              ${optionalString cfg.quic AltSvcH3Line}
             '';
           }
         ) cfg.virtualHosts
@@ -92,10 +106,10 @@ in
           // value
           // {
             extraConfig = ''
-              ${if value ? "extraConfig" then value.extraConfig else ""}
+              ${optionalString (value ? "extraConfig") value.extraConfig}
               ssl_verify_client on;
-              add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
-              ${lib.optionalString cfg.quic ''add_header Alt-Svc 'h3=":$server_port"; ma=86400';''}
+              ${HSTSLine}
+              ${optionalString cfg.quic AltSvcH3Line}
             '';
           }
         ) cfg.selfSignedVirtualHosts);
