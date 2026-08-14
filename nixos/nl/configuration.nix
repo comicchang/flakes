@@ -130,7 +130,15 @@ in
   };
 
   presets.vouch.bt = {
-    settings.vouch.port = 2001;
+    settings = {
+      vouch.port = 2001;
+      oauth = {
+        auth_url = "https://pocket-id.rvf6.com/authorize";
+        token_url = "https://pocket-id.rvf6.com/api/oidc/token";
+        user_info_url = "https://pocket-id.rvf6.com/api/oidc/userinfo";
+        code_challenge_method = "S256";
+      };
+    };
     jwtSecretFile = config.sops.secrets."vouch-bt/jwt".path;
     clientSecretFile = config.sops.secrets."vouch-bt/client".path;
     authLocations = [
