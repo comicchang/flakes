@@ -18,6 +18,7 @@ in
     ./cn-slice.nix
     ./dns.nix
     ./fakesip.nix
+    ./grafana.nix
     ./home-assistant
     ./lan.nix
     ./mosquitto.nix
