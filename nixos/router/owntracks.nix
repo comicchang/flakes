@@ -47,11 +47,13 @@ in
     enable = true;
     localDomain = "dawarich.rvf6.com";
     environment = {
-      OIDC_CLIENT_ID = "dawarich";
-      OIDC_ISSUER = "https://id.rvf6.com/realms/rvfg";
+      OIDC_ISSUER = "https://pocket-id.rvf6.com";
       OIDC_REDIRECT_URI = "https://dawarich.rvf6.com/users/auth/openid_connect/callback";
+      OIDC_PKCE_ENABLED = "true";
+      OIDC_PROVIDER_NAME = "Pocket ID";
       OIDC_AUTO_REGISTER = "true";
       ALLOW_EMAIL_PASSWORD_REGISTRATION = "false";
+      ALLOW_EMAIL_PASSWORD_LOGIN = "false";
     };
     extraEnvFiles = [ config.sops.secrets."dawarich/oidc_secret_env".path ];
     secretKeyBaseFile = config.sops.secrets."dawarich/secret_key_base".path;
