@@ -72,6 +72,7 @@ in
     };
     networking.nftables.checkRuleset = false;
     networking.nftables.masquerade = optional (masqueradeIfs != "") "iifname { ${masqueradeIfs} }";
+    networking.nftables.mssClamping = true;
     networking.nftables.tables.interface-mark = {
       family = "inet";
       content = concatStringsSep "\n" (
