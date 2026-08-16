@@ -141,6 +141,8 @@ in
       ]; # KDE Connect
     };
 
+    networking.nftables.allowContainerVeth = true;
+
     environment.systemPackages = with pkgs; [
       # keep-sorted start
       android-tools

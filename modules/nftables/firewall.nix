@@ -19,6 +19,8 @@ in
       default = false;
     };
 
+    networking.nftables.allowContainerVeth = mkEnableOption { };
+
     # TODO RPDB, route table
     networking.nftables.inboundInterfaces = mkOption {
       type = types.listOf types.str;
@@ -62,6 +64,13 @@ in
         ''}
       '';
     };
+
+    networking.firewall.extraInputRules = ''
+      meta iifkind veth udp dport {53, 67, 68} accept
+    '';
+    networking.firewall.extraForwardRules = ''
+      meta iifkind veth accept
+    '';
 
   };
 }
