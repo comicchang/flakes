@@ -62,8 +62,10 @@
     "oidc_client_secret:${config.sops.secrets."grafana/oidc_client_secret".path}"
   ];
 
-  presets.nginx.virtualHosts."grafana.rvf6.com".locations."/".proxyPass =
-    "http://unix:${config.services.grafana.settings.server.socket}:/";
+  presets.nginx.virtualHosts."grafana.rvf6.com".locations."/" = {
+    proxyPass = "http://unix:${config.services.grafana.settings.server.socket}:/";
+    proxyWebsockets = true;
+  };
 
   systemd.services.nginx.serviceConfig.SupplementaryGroups = [ "grafana" ];
 
