@@ -1,6 +1,18 @@
 { lib, config, ... }:
-with lib;
 let
+  inherit (lib)
+    # keep-sorted start
+    concatStringsSep
+    imap0
+    length
+    mkEnableOption
+    mkIf
+    mkOption
+    optionalString
+    types
+    # keep-sorted end
+    ;
+
   cfg = config.networking.nftables;
 
   markOffset = 65536;
