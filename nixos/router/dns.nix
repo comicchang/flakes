@@ -17,7 +17,7 @@ let
   updateDnsScript = pkgs.writeShellScript "update-run-dns-resolv-conf" ''
     set -eu -o pipefail
     umask 0022
-    DNS=$(cat /run/dns/* 2>/dev/null || true)
+    DNS=$(cat /run/dns/{networkd,ppp} 2>/dev/null || true)
     DNS_RESOLV_CONF=$(echo "$DNS" | sed 's/^/nameserver /')
     RESOLV_CONF_PATH="/run/dns/resolv.conf"
     if [[ ! -z "$DNS" ]]; then
