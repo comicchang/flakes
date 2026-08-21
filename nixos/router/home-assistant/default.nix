@@ -70,6 +70,7 @@ in
     ];
     extraPackages =
       python3Packages: with python3Packages; [
+        aiohomekit
         hap-python
         pyqrcode
       ];
