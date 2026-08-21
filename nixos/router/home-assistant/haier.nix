@@ -9,6 +9,8 @@ buildHomeAssistantComponent {
   owner = "banto6";
   domain = "haier";
 
+  patches = [ ./haier-temperature-fix.patch ];
+
   meta = {
     description = "Haier HomeAssistant integration";
     homepage = "https://github.com/banto6/haier";

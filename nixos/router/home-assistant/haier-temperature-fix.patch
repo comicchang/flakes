@@ -1,0 +1,40 @@
+From 138c7f82cd1975da73733f2a4a01eaf7200a7f0a Mon Sep 17 00:00:00 2001
+From: linshiyonghu12138 <74443291+linshiyonghu12138@users.noreply.github.com>
+Date: Thu, 13 Aug 2026 10:30:55 +0800
+Subject: [PATCH] =?UTF-8?q?fix:=20=E7=87=83=E6=B0=94=E7=83=AD=E6=B0=B4?=
+ =?UTF-8?q?=E5=99=A8=E6=B8=A9=E5=BA=A6=E8=8C=83=E5=9B=B4=E8=BD=AC=E4=B8=BA?=
+ =?UTF-8?q?=E6=95=B0=E5=AD=97=EF=BC=8C=E4=BF=AE=E5=A4=8D=E5=AE=9E=E4=BD=93?=
+ =?UTF-8?q?=E6=B3=A8=E5=86=8C=E5=A4=B1=E8=B4=A5?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+接口返回的 dataStep 中 minValue/maxValue/step 均为字符串，经
+entity.py 的 setattr 直接赋给 _attr_min_temp 等属性后，HA 的
+display_temp() 因非数字类型抛出 TypeError，导致 water_heater
+实体注册失败、状态变为 unavailable。
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+---
+ custom_components/haier/core/attribute.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/custom_components/haier/core/attribute.py b/custom_components/haier/core/attribute.py
+index 505721d..b5c2293 100644
+--- a/custom_components/haier/core/attribute.py
++++ b/custom_components/haier/core/attribute.py
+@@ -214,10 +214,11 @@ def _parse_as_gas_water_heater(attributes: List[dict]):
+         else:
+             raise RuntimeError('targetTemp attr not found')
+ 
++        data_step = target_temperature_attr['valueRange']['dataStep']
+         options = {
+-            'min_temp': target_temperature_attr['valueRange']['dataStep']['minValue'],
+-            'max_temp': target_temperature_attr['valueRange']['dataStep']['maxValue'],
+-            'target_temperature_step': target_temperature_attr['valueRange']['dataStep']['step']
++            'min_temp': float(data_step['minValue']),
++            'max_temp': float(data_step['maxValue']),
++            'target_temperature_step': float(data_step['step'])
+         }
+ 
+         ext = {
