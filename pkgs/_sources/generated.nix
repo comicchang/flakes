@@ -52,13 +52,13 @@
   };
   haier = {
     pname = "haier";
-    version = "v1.2.0";
+    version = "v1.3.0";
     src = fetchFromGitHub {
       owner = "banto6";
       repo = "haier";
-      rev = "v1.2.0";
+      rev = "v1.3.0";
       fetchSubmodules = false;
-      sha256 = "sha256-92tla8+fvvym6cpz1ZQCjZZwx769diAN7GUzRM6DwGs=";
+      sha256 = "sha256-ZVz2Tfkrhq1xpYU4D749wTTePvqOEWmyNse3evDBUgk=";
     };
   };
   kernelsu = {
@@ -85,13 +85,13 @@
   };
   midea_auto_cloud = {
     pname = "midea_auto_cloud";
-    version = "v0.4.12";
+    version = "v0.4.13";
     src = fetchFromGitHub {
       owner = "sususweet";
       repo = "midea_auto_cloud";
-      rev = "v0.4.12";
+      rev = "v0.4.13";
       fetchSubmodules = false;
-      sha256 = "sha256-ljx0lqg/hXul4HkL5Ow+CuT8Xln/9qdPKT5Cgp1cdjs=";
+      sha256 = "sha256-slbneOkPvl4JiB2kCs2FkAg3k8/rhinFd0qgobN6P44=";
     };
   };
   owntracks-frontend = {
