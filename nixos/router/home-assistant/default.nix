@@ -76,7 +76,7 @@ in
   };
 
   presets.nginx.virtualHosts."ha.rvf6.com".locations."/" = {
-    proxyPass = "http://[::1]:${toString config.services.home-assistant.config.http.server_port}";
+    proxyPass = "http://[::1]:8123";
     proxyWebsockets = true;
   };
 
