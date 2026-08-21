@@ -70,9 +70,13 @@ in
     ];
     extraPackages =
       python3Packages: with python3Packages; [
+        # keep-sorted start
         aiohomekit
         hap-python
         pyqrcode
+        python-otbr-api
+        xiaomi-ble
+        # keep-sorted end
       ];
   };
 
