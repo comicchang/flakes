@@ -1,4 +1,4 @@
-{ ... }:
+{ self, ... }:
 {
 
   presets.nogui.enable = true;
@@ -23,8 +23,8 @@
   systemd.network.networks."10-enp3s0" = {
     name = "enp3s0";
     address = [
-      "2a12:a303:11e:25::a/64"
-      "176.119.148.40/24"
+      "${self.data.dns.g2.ipv6}/64"
+      "${self.data.dns.g2.ipv4}/24"
     ];
     dns = [
       "2001:4860:4860::8888"
