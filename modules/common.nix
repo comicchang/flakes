@@ -60,7 +60,7 @@ with lib;
     };
     kernelPackages = pkgs.linuxPackages_latest;
     kernel.sysctl = {
-      "net.core.default_qdisc" = "fq";
+      "net.core.default_qdisc" = "fq_codel";
       "net.ipv4.tcp_congestion_control" = "bbr";
       "net.core.rmem_max" = mkDefault 16777216;
       "net.core.wmem_max" = mkDefault 16777216;
