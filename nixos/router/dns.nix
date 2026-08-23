@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  self,
   ...
 }:
 let
@@ -20,16 +19,28 @@ let
     DNS=$(cat /run/dns/{networkd,ppp} 2>/dev/null || true)
     DNS_RESOLV_CONF=$(echo "$DNS" | sed 's/^/nameserver /')
     RESOLV_CONF_PATH="/run/dns/resolv.conf"
-    if [[ ! -z "$DNS" ]]; then
-      echo "Writing $RESOLV_CONF_PATH"
-      echo "$DNS_RESOLV_CONF"
-      TMP_FILE="$(mktemp -p /run/dns resolv.XXXXXXXXXX.conf)"
+    DNS_SMARTDNS_CONF=$(echo "$DNS" | sed 's/^/server /')
+    SMARTDNS_CONF_PATH="/run/dns/smartdns.conf"
+    function atomic_write() {
+      NAME="$1"
+      TARGET="$2"
+      CONTENT="$3"
+      echo "Writing $TARGET"
+      echo "$CONTENT"
+      TMP_FILE="$(mktemp -p /run/dns "$NAME".XXXXXXXXXX.conf)"
       chmod 644 "$TMP_FILE"
-      echo "$DNS_RESOLV_CONF" > "$TMP_FILE"
-      mv "$TMP_FILE" "$RESOLV_CONF_PATH"
+      echo "$CONTENT" > "$TMP_FILE"
+      mv "$TMP_FILE" "$TARGET"
+    }
+    if [[ ! -z "$DNS" ]]; then
+      atomic_write resolv "$RESOLV_CONF_PATH" "$DNS_RESOLV_CONF"
+      atomic_write smartdns "$SMARTDNS_CONF_PATH" "$DNS_SMARTDNS_CONF"
     elif [[ ! -f "$RESOLV_CONF_PATH" ]]; then
       echo "Creating empty $RESOLV_CONF_PATH"
       touch "$RESOLV_CONF_PATH"
+    elif [[ ! -f "$SMARTDNS_CONF_PATH" ]]; then
+      echo "Creating empty $SMARTDNS_CONF_PATH"
+      touch "$SMARTDNS_CONF_PATH"
     fi
   '';
 in
@@ -87,35 +98,16 @@ in
       ];
     };
 
-    systemd.services.dnsmasq-cn = {
-      description = "Dnsmasq DNS CN";
-      after = [ "network.target" ];
-      before = [ "adguardhome.service" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = self.data.systemdHarden // {
-        Type = "simple";
-        ExecStartPre = "+${updateDnsScript}";
-        ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq -k -C ${pkgs.writeText "dnsmasq-cn.conf" ''
-          port=${toString dnsPortCN}
-          listen-address=::
-          listen-address=0.0.0.0
-          interface=lo
-          interface=v1-lan
-          interface=xfrm0
-          interface=wg-router
-          resolv-file=/run/dns/resolv.conf
-        ''}";
-        Restart = "on-failure";
-        PrivateNetwork = false;
-        RestrictAddressFamilies = [
-          # keep-sorted start
-          "AF_INET"
-          "AF_INET6"
-          "AF_NETLINK"
-          "AF_UNIX"
-          # keep-sorted end
-        ];
+    presets.smartdns.cn = {
+      bindPort = dnsPortCN;
+      settings = {
+        conf-file = "/run/dns/smartdns.conf";
+        serve-expired = false;
       };
+    };
+    systemd.services.smartdns-cn = {
+      before = [ "adguardhome.service" ];
+      serviceConfig.ExecStartPre = "+${updateDnsScript}";
     };
 
   };

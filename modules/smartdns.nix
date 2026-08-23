@@ -1,114 +1,116 @@
 {
   lib,
   config,
-  inputs,
   pkgs,
   self,
   ...
 }:
 let
+  inherit (lib)
+    # keep-sorted start
+    generators
+    getExe
+    isBool
+    mapAttrs'
+    mkDefault
+    mkEnableOption
+    mkOption
+    nameValuePair
+    optionalAttrs
+    toList
+    types
+    # keep-sorted end
+    ;
+
   cfg = config.presets.smartdns;
 
-  chinaListRaw =
-    (builtins.readFile "${inputs.dnsmasq-china-list.outPath}/accelerated-domains.china.conf")
-    + (builtins.readFile "${inputs.dnsmasq-china-list.outPath}/apple.china.conf");
-  chinaList = pkgs.writeText "china-list" (
-    builtins.replaceStrings
-      [
-        "server="
-        "114.114.114.114"
-      ]
-      [
-        "nameserver "
-        "china"
-      ]
-      chinaListRaw
-  );
+  smartdnsOptions = { config, name, ... }: {
+    options = {
+      enable = mkEnableOption "Whether to enable this instance" // {
+        default = true;
+      };
 
-  confFile = pkgs.writeText "smartdns.conf" (
-    with lib.generators;
-    toKeyValue {
-      mkKeyValue = mkKeyValueDefault {
-        mkValueString = v: if lib.isBool v then if v then "yes" else "no" else mkValueStringDefault { } v;
-      } " ";
-      listsAsDuplicateKeys = true;
-    } cfg.settings
-  );
-in
-{
-  options = {
-    presets.smartdns.enable = lib.mkEnableOption "";
+      bindAddress = mkOption {
+        type = types.str;
+        default = "[::]";
+      };
 
-    presets.smartdns.bindPort = lib.mkOption {
-      type = lib.types.port;
-      default = 53;
+      bindPort = mkOption {
+        type = types.port;
+        default = 53;
+      };
+
+      settings = mkOption {
+        type =
+          with types;
+          let
+            atom = oneOf [
+              str
+              int
+              bool
+            ];
+          in
+          attrsOf (coercedTo atom toList (listOf atom));
+      };
     };
 
-    presets.smartdns.settings = lib.mkOption {
-      type =
-        with lib.types;
-        let
-          atom = oneOf [
-            str
-            int
-            bool
-          ];
-        in
-        attrsOf (coercedTo atom lib.toList (listOf atom));
-    };
-
-    presets.smartdns.chinaDns = lib.mkOption {
-      type = with lib.types; listOf str;
-      default = [
-        "[2400:3200::1]"
-        "[2402:4e00::]"
-        "223.5.5.5"
-        "119.29.29.29"
-      ];
-    };
-
-    presets.smartdns.nonChinaDns = lib.mkOption {
-      type = with lib.types; listOf str;
-      default = [
-        "[2606:4700:4700::1111]"
-        "[2001:4860:4860::8888]"
-      ];
+    config = {
+      settings = {
+        bind = mkDefault [ "${config.bindAddress}:${toString config.bindPort}" ];
+        response-mode = mkDefault "fastest-response";
+        cache-persist = mkDefault true;
+        cache-file = mkDefault "/var/cache/smartdns-${name}/smartdns.cache";
+        log-file = mkDefault "/dev/null";
+        log-console = mkDefault true;
+        dualstack-ip-selection = mkDefault false;
+      };
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  toConfFile =
+    settings:
+    pkgs.writeText "smartdns.conf" (
+      with generators;
+      toKeyValue {
+        mkKeyValue = mkKeyValueDefault {
+          mkValueString = v: if isBool v then if v then "yes" else "no" else mkValueStringDefault { } v;
+        } " ";
+        listsAsDuplicateKeys = true;
+      } settings
+    );
+in
+{
+  options = {
 
-    services.resolved.enable = false;
-    networking.resolvconf.enable = false;
-
-    environment.etc."resolv.conf".text = ''
-      nameserver ::1
-    '';
-
-    presets.smartdns.settings = {
-      bind = [ "[::]:${toString cfg.bindPort}" ];
-      response-mode = "fastest-response";
-      conf-file = chinaList.outPath;
-      server = (map (i: "${i} -group china -exclude-default-group") cfg.chinaDns) ++ cfg.nonChinaDns;
-      cache-persist = true;
-      cache-file = "/var/cache/smartdns/smartdns.cache";
-      log-file = "/dev/null";
-      log-console = true;
+    presets.smartdns = mkOption {
+      type = types.attrsOf (types.submodule smartdnsOptions);
+      default = { };
     };
 
-    systemd.services.smartdns = {
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = self.data.systemdHarden // {
-        ExecStart = "${pkgs.smartdns}/bin/smartdns -f -x -p - -c ${confFile}";
-        CacheDirectory = "%N";
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-        PrivateNetwork = false;
-        PrivateUsers = false;
-        SocketBindAllow = cfg.bindPort;
-      };
-    };
+  };
+
+  config = {
+
+    systemd.services = mapAttrs' (
+      name: iCfg:
+      nameValuePair "smartdns-${name}" {
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig =
+          self.data.systemdHarden
+          // {
+            ExecStart = "${getExe pkgs.smartdns} -f -x -p - -c ${toConfFile iCfg.settings}";
+            CacheDirectory = "%N";
+            PrivateNetwork = false;
+          }
+          // (optionalAttrs (iCfg.bindPort < 1024) {
+            PrivateUsers = false;
+            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+            CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+            SocketBindAllow = iCfg.bindPort;
+          });
+      }
+    ) cfg;
 
   };
 }

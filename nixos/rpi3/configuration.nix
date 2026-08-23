@@ -90,22 +90,9 @@ in
         Priority = 128;
       }
     ];
-  presets.smartdns = {
+  presets.smartdnsChinaList = {
     enable = true;
     chinaDns = [ "[fd69:2011:6f1d::1]" ];
-    settings.address = [
-      "/t430.rvf6.com/10.6.6.1"
-      "/t430.rvf6.com/fd64::1"
-      "/ax6s.rvf6.com/fd65::1"
-      "/ax6s.rvf6.com/-4"
-      "/rpi3.rvf6.com/10.7.0.7"
-      "/fava.rvf6.com/fd64::1"
-      "/fava.rvf6.com/-4"
-      "/luci.rvf6.com/fd64::1"
-      "/luci.rvf6.com/-4"
-      "/ha.rvf6.com/fd64::1"
-      "/ha.rvf6.com/-4"
-    ];
   };
 
   services.tailscale = {

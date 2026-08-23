@@ -26,6 +26,7 @@
     ./shadowsocks.nix
     ./sing-box.nix
     ./smartdns.nix
+    ./smartdns-china-list.nix
     ./ssh-agent.nix
     ./swanctl-dynamic-ipv6.nix
     ./swanctl-gfw
