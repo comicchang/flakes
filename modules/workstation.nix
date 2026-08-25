@@ -8,9 +8,10 @@
 let
   inherit (lib)
     # keep-sorted start
-    concatMapStringsSep
+    concatStrings
     elem
     filterAttrs
+    mapAttrsToList
     mkDefault
     mkForce
     mkIf
@@ -267,73 +268,52 @@ in
         hinting.enable = true;
         subpixel.lcdfilter = "none";
         subpixel.rgba = "none";
+        aliases = {
+          # keep-sorted start
+          "-apple-system".prefer = [ "sans-serif" ];
+          "Arial".prefer = [ "sans-serif" ];
+          "Helvetica".prefer = [ "sans-serif" ];
+          "Noto Sans".prefer = [ "sans-serif" ];
+          "system-ui".prefer = [ "sans-serif" ];
+          # keep-sorted end
+          "Source Code Pro".prefer = [ "Hack" ];
+        };
         localConf = ''
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
           <fontconfig>
 
-            <match target="scan">
-              <test name="family">
-                <string>Inter Variable</string>
-              </test>
-              <edit name="genericfamily" mode="assign_replace">
-                <const>sans-serif</const>
-              </edit>
-            </match>
+            <selectfont>
+              <rejectfont>
+                <pattern>
+                  <patelt name="family">
+                    <string>DejaVu Sans</string>
+                  </patelt>
+                </pattern>
+              </rejectfont>
+            </selectfont>
 
-            <match target="scan">
-              <test name="family">
-                <string>Inter</string>
-              </test>
-              <edit name="genericfamily" mode="assign_replace">
-                <const>sans-serif</const>
-              </edit>
-            </match>
-
-            <match target="scan">
-              <test name="family">
-                <string>Hack</string>
-              </test>
-              <edit name="genericfamily" mode="assign_replace">
-                <const>monospace</const>
-              </edit>
-            </match>
-
-            <match target="scan">
-              <test name="family">
-                <string>Aleo</string>
-              </test>
-              <edit name="genericfamily" mode="assign_replace">
-                <const>serif</const>
-              </edit>
-            </match>
-
-            ${concatMapStringsSep "\n"
-              (font: ''
-                <alias binding="same">
-                  <family>${font}</family>
-                  <prefer>
-                    <family>sans-serif</family>
-                  </prefer>
-                </alias>
-              '')
-              [
-                # keep-sorted start
-                "-apple-system"
-                "Arial"
-                "Helvetica"
-                "Noto Sans"
-                "system-ui"
-                # keep-sorted end
-              ]
-            }
-
-            <alias>
-              <family>Source Code Pro</family>
-              <prefer>
-                <family>Hack</family>
-              </prefer>
-            </alias>
+            ${concatStrings (
+              mapAttrsToList
+                (font: genericfamily: ''
+                  <match target="scan">
+                    <test name="family">
+                      <string>${font}</string>
+                    </test>
+                    <edit name="genericfamily" mode="assign_replace">
+                      <const>${genericfamily}</const>
+                    </edit>
+                  </match>
+                '')
+                {
+                  # keep-sorted start
+                  "Aleo" = "serif";
+                  "Hack" = "monospace";
+                  "Inter Variable" = "sans-serif";
+                  "Inter" = "sans-serif";
+                  # keep-sorted end
+                }
+            )}
 
           </fontconfig>
         '';
