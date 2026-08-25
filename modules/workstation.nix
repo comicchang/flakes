@@ -8,6 +8,7 @@
 let
   inherit (lib)
     # keep-sorted start
+    concatMapStrings
     concatStrings
     elem
     filterAttrs
@@ -268,16 +269,6 @@ in
         hinting.enable = true;
         subpixel.lcdfilter = "none";
         subpixel.rgba = "none";
-        aliases = {
-          # keep-sorted start
-          "-apple-system".prefer = [ "sans-serif" ];
-          "Arial".prefer = [ "sans-serif" ];
-          "Helvetica".prefer = [ "sans-serif" ];
-          "Noto Sans".prefer = [ "sans-serif" ];
-          "system-ui".prefer = [ "sans-serif" ];
-          # keep-sorted end
-          "Source Code Pro".prefer = [ "Hack" ];
-        };
         localConf = ''
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
@@ -312,6 +303,28 @@ in
                   "Inter Variable" = "sans-serif";
                   "Inter" = "sans-serif";
                   # keep-sorted end
+                }
+            )}
+
+            ${concatStrings (
+              mapAttrsToList
+                (font: prefer: ''
+                  <alias binding="same">
+                    <family>${font}</family>
+                    <prefer>
+                      <family>${prefer}</family>
+                    </prefer>
+                  </alias>
+                '')
+                {
+                  # keep-sorted start
+                  "-apple-system" = "sans-serif";
+                  "Arial" = "sans-serif";
+                  "Helvetica" = "sans-serif";
+                  "Noto Sans" = "sans-serif";
+                  "system-ui" = "sans-serif";
+                  # keep-sorted end
+                  "Source Code Pro" = "Hack";
                 }
             )}
 
